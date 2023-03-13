@@ -5,6 +5,20 @@ sudo apt install git-all
 # Mac OS 默认已经安装
 git --version
 
+#=== GitHub520 ====
+https://github.com/521xueweihan/GitHub520
+#下面的地址无需访问 GitHub 即可获取到最新的 hosts 内容：
+文件：https://raw.hellogithub.com/hosts
+JSON：https://raw.hellogithub.com/hosts.json
+
+#一行命令 (适用于类 Unix 系统)
+GNU（Ubuntu/CentOS/Fedora）
+sed -i "/# GitHub520 Host Start/Q" /etc/hosts && curl https://raw.hellogithub.com/hosts >> /etc/hosts
+
+BSD/macOS
+sed -i "" "/# GitHub520 Host Start/,/# Github520 Host End/d" /etc/hosts && curl https://raw.hellogithub.com/hosts >> /etc/hosts
+将上面的命令添加到 cron，可定时执行。使用前确保 GitHub520 内容在该文件最后部分。
+
 #====  配置 =====
 git config --global user.name andylee765
 git config --global user.email andylee765@gmail.com
