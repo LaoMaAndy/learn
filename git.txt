@@ -1,0 +1,121 @@
+#git 初始化
+#====  安装GitHub =====
+# Linux下安装
+sudo apt install git-all
+# Mac OS 默认已经安装
+git --version
+
+#====  配置 =====
+git config --global user.name andylee765
+git config --global user.email andylee765@gmail.com
+git config --global color.ui auto
+
+
+#====  创建本地仓库 =====
+# 方法一：使用git init指令
+git init
+# 删除 rm -rf .git
+# 方法二：使用git clone指令
+git clone https://github.com/andylee765/learn.git
+
+#=== 查看状态 / 添加代码 / 提交 =====
+git status
+git add *
+git commit -m "first commit"
+
+#=== 设置远程别名 =====
+#在GitHub设置代码仓库
+#设置完成后，将远程URL添加至本地
+#使用https: git remote add learn https://github.com/andylee765/learn.git
+#删除指令: git remote rm learn
+git remote add learn git@github.com:andylee765/learn.git
+#测试
+git remote -v
+#如果输出以下内容，则为测试成功
+learn   https://github.com/andylee765/learn.git (fetch)
+learn   https://github.com/andylee765/learn.git (push)
+
+#=== 生成密钥对 =====
+ssh-keygen -t rsa -C "andylee765@gmail.com"
+    #默认存储在 /Users/lixudong/.ssh/id_rs
+    #Enter passphrase (empty for no passphrase): 
+    #此处设为无密码
+    #id_rsa 文件是私有密钥，id_rsa.pub 是公开密钥。
+    #The key fingerprint is:
+    #SHA256:Iqnp7ZEtGsdxyHkgDY0m3WG4Uk41dhFUaETB0TFHWWE
+    #andylee765@gmail.com
+#在页面中导入公开密钥。
+#个人-> Setting -> SSHand GPG keys -> New SSH Key
+#测试
+ssh -T git@github.com
+#上传代码
+git push -u learn main
+
+#=== 网络连接-设置proxy =====
+#HTTPS协议必须配置一下proxy
+git config --global http.proxy http://127.0.0.1:1087
+git config --global https.proxy socks://127.0.0.1:1080
+#取消网络设置
+git config --unset http.proxy
+git config --global --unset http.proxy
+git config --system --unset http.proxy
+
+git config --unset https.proxy
+git config --global --unset https.proxy
+git config --system --unset https.proxy
+
+#网络协议：socks/socks5/socks5h
+#git config --global http.proxy 'socks5h://127.0.0.1:1080'
+
+#===============================
+#/bin/bash
+# 2021
+# 向Github上传所有code文件夹
+git_up_all() {
+local code_path="$HOME/Documents/code"
+local -a each_folder
+each_folder[0]="bin"
+each_folder[1]="learn"
+each_folder[2]="proj/hello"
+
+local -a main_branch
+main_branch[0]="master"
+main_branch[1]="master"
+main_branch[2]="main"
+
+echo "## 向Github上传所有code文件夹 ##"
+echo "文件夹为："
+for foo in "${each_folder[@]}"; do
+    echo "$code_path/$foo"
+done
+echo
+echo "## 顺序执行 ##"
+local index=0
+local git_stat
+for foo in "${each_folder[@]}"; do
+    cd "$code_path/$foo"
+    echo "pwd[$index]: $(pwd)"
+    git_stat=$(git status | grep -i "nothing to commit")
+    if [ -n "$git_stat" ]; then
+        echo "==> Nothing to commit."
+    else
+        echo "==> git add -vA *"
+        git add -vA *
+        echo "==> git commit -avm $(basename -a $(pwd))"
+        git commit -avm "$(basename -a $(pwd))"
+    fi  
+    echo "==> git push origin ${main_branch[index]}"
+    git push origin "${main_branch[index]}"
+    ((++index))
+    echo
+done
+echo "done"
+}
+git_up_all
+#===============================
+#!/bin/bash
+# 2021
+git add -vA *
+git commit -avm $(basename -a $(pwd))
+git push origin master
+#===============================
