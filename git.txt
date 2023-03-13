@@ -12,12 +12,13 @@ git config --global color.ui auto
 
 
 #====  创建本地仓库 =====
+###### 使用GitHub Desktop ######
+
 # 方法一：使用git init指令
 git init
 # 删除 rm -rf .git
 # 方法二：使用git clone指令
-git clone https://github.com/andylee765/learn.git
-
+git clone git@github.com:andylee765/learn.git
 #=== 查看状态 / 添加代码 / 提交 =====
 git status
 git add *
