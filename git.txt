@@ -1,4 +1,30 @@
-#git 初始化
+#步骤：
+# 安装Git（macOS 默认已经安装）
+    git --version
+    sudo apt install git-all
+# 安装 GitHub Desktop
+# 登录github.com, 建立库
+# 生成密钥对，公钥上传至github
+# 修改host, GitHub520
+    github.com/xmlgrg/GitHub520-
+# 设置环境：
+    git config --global user.name andylee765
+    git config --global user.email andylee765@gmail.com
+    git config --global color.ui auto
+# 克隆库
+    git clone git@github.com:andylee765/learn.git
+# 也可使用git init初始化
+# 设置远程库变量
+    git remote add learn git@github.com:andylee765/learn.git
+#=== 查看状态 / 添加代码 / 提交 =====
+    git status
+    git add *
+    git commit -m "first commit"
+# 推送
+    git push -u learn main
+# 设置GitHub520 Host自动更新
+
+#=========================================
 #====  安装GitHub =====
 # Linux下安装
 sudo apt install git-all
