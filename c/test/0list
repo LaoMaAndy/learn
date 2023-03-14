@@ -1,0 +1,6 @@
+同时对一个文件进行读写。替换串，替换文件字符串strupd
+readwrite.c
+
+kstr.c
+一个替代string的数据类型
+

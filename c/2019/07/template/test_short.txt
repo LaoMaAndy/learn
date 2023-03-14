@@ -1,0 +1,18 @@
+void test_pbrk()
+{
+	char c[100] = "z1aa2bbb3cccc4ddddd5eeeeee6ffffffff7ggggggggg8";
+	char d[30] = "1234567890\0zzz";
+	char *p = c;
+	int i;
+
+	printf("=====Test Strpbrk()========\n");
+	printf("string: %s\n", c);
+	printf("Find: ");
+	for (i = 0; i < 8; ++i)
+	{
+		p = Strpbrk(p, d);
+		printf("%3c", *p);
+		++p;
+	}
+	printf("\n");
+}

@@ -1,0 +1,5 @@
+recurse: c1214r.c  
+//modify function name: intprn->prnint, strprn->prnstr
+//rewrite & modify name: setbits, clrbits, chkbit
+
+					
