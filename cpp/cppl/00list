@@ -1,0 +1,20 @@
+/* 1.9 */                                           /* bug report: see the text file */
+int get_line(char s[], int lim)
+{   
+    int c, i;
+    
+    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c!= '\n'; ++i)	 	/* for循环 */
+        s[i] = c;
+    if (c == '\n')								/* 换行符判断 */
+    {   
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+/* 
+BUG说明：当lim = 1时，"for循环"不满足条件，不执行循环，至"换行符判断"，而此时c尚未初始化(#1),
+	如果c恰好等于'\n'，则s[0] = '\n'，而s[1] = '\0'，产生溢出(#2)
+	当lim = 2时，
+*/

@@ -1,0 +1,2 @@
+gcc ../list/list.c ../list/list_single.c ../list/node_single.c ../list/node.c ../elem/elem.c $1
+

@@ -14,6 +14,9 @@
 # 克隆库
     git clone git@github.com:andylee765/learn.git
 # 也可使用git init初始化
+# 设置ignore
+    touch .gitignore
+    https://gist.github.com/octocat/9257657
 # 设置远程库变量
     git remote add learn git@github.com:andylee765/learn.git
 #=== 查看状态 / 添加代码 / 提交 =====
@@ -37,7 +40,7 @@ https://github.com/521xueweihan/GitHub520
 文件：https://raw.hellogithub.com/hosts
 JSON：https://raw.hellogithub.com/hosts.json
 
-#一行命令 (适用于类 Unix 系统)
+#更新/etc/hosts命令 (适用于类 Unix 系统)
 GNU（Ubuntu/CentOS/Fedora）
 sed -i "/# GitHub520 Host Start/Q" /etc/hosts && curl https://raw.hellogithub.com/hosts >> /etc/hosts
 
