@@ -3,7 +3,7 @@
 * Most comments are in simplified Chinese.
 * Learn and practice programming, etc.
 * Knowledge is infinite.
-* Welcome here: 
+* Welcome here.
 * Andy Lee, AndyLee765@gmail.com
 ----
 * 简体中文注释
