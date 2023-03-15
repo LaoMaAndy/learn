@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#
 def p6_1():
 	'''Chapter 6 examples'''
 	print('This is chapter 6 examples')
@@ -9,9 +10,9 @@ def ret_diff(i):
 	i = int(i)
 	print("i's value: ", i)
 	if i > 5:
-		return 'Bigger than 5' 
+		return 'Bigger than 5'
 	elif i > 0:
-		return 
+		return
 	else:
 		return i
 def ret_list():
@@ -52,7 +53,7 @@ def store(data, *full_names):
 			if people:
 				people.append(full_name)
 				print("After append".center(20, '*'))
-				for k, v in data.items():				
+				for k, v in data.items():
 					print(k, ":", v)
 			else:
 				data[label][name] = [full_name]

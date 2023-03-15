@@ -1,5 +1,5 @@
-# ===============
-# by Andy
+#!/usr/bin/python3
+# 2023-3-15整理
 def fibo(n):
     count  = 1
     a, b = 0, 1

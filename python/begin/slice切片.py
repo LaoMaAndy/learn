@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+# 2023-3-15整理
+# 切片，表达式
 def test_slice():
 	print('=== test_slice ===')
 	name = ['Alice', 'Beth', 'Cecil', 'Dee-Dee', 'Earl']

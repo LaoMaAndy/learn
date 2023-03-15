@@ -1,4 +1,6 @@
+#!/usr/bin/python3
 # ==== 字典 数据类型 ==== #
+# 2023-3-15
 def test_dict():
 	d = {'x' : 1, 'y' : 2, 'z' : 3}
 	print("Print dict key:")
@@ -14,7 +16,7 @@ def test_zip():
 	a = [1, 2, 3, 4]
 	b = ['a', 'b', 'c', 'd']
 	c = list(zip(a, b))
-	print(c) 
+	print(c)
 
 def test_copy():
 	print("test_copy")

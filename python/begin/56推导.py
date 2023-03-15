@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# 2023-3-15整理
 def test_compre():
     girls = ['alice', 'bernice', 'clarice', 'billy']
     boys = ['chris', 'arnold', 'bob']
@@ -36,7 +38,7 @@ print("end")
 
 def test_doc():
     ''' There some docstring,
-    for some reason, 
+    for some reason,
     it can be nothing'''
     print(test_doc.__name__)
     print("function's docstring:")
@@ -52,5 +54,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

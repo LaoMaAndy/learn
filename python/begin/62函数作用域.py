@@ -16,7 +16,7 @@ def main():
 	test_scope()
 def prn_vars(v):
 	for k, v in v.items():
-		print('{:<20s} : {:<20s}'.format(str(k), str(v)))	
+		print('{:<20s} : {:<20s}'.format(str(k), str(v)))
 def test_glob():
 	# 使用globals() 访问全局变量
 	# 只读全局变量时，使用这种方式

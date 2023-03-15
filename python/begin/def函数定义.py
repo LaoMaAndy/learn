@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+# 2023-3-15整理
 # ========================
 # 简单语句、函数
 # 值传递、引用传递
@@ -27,12 +28,12 @@ def test_simple():
 # 2022-02-11
 # Coder: Andy
 #
-def fib(n): 
+def fib(n):
 	"""打印Fibonacci数列。 共n个数字，中间一个空格"""
 	count = 1
 	a, b = 0, 1
 	while count <= n:
-		a,b = b, a + b 
+		a,b = b, a + b
 		print(a, end = ' ')
 		count += 1
 	return a
@@ -50,7 +51,7 @@ def my_function():
 	"""
 	pass
 def test_doc():
-	print(my_function.__doc__) 
+	print(my_function.__doc__)
 	print("\n")
 # ========================
 # 函数参数
@@ -73,7 +74,7 @@ class MyBook:
 	def __str__(self):
 		result = "Books: "
 		for element in self.books:
-			result = result + repr(element) + ' ' 
+			result = result + repr(element) + ' '
 		result = result + "Index: " + str(self.index)
 		return result
 	def print(self):
@@ -101,15 +102,15 @@ def test_class():
 # 描述 点的类
 class Point:
 	def __init__(self, x = 0, y = 0):
-		self.x = x 
-		self.y = y 
+		self.x = x
+		self.y = y
 	def movex(self, x = 0):
-		self.x += x 
+		self.x += x
 	def movey(self, y = 0):
-		self.y += y 
+		self.y += y
 	def moveto(x, y):
-		self.x = x 
-		self.y = y 
+		self.x = x
+		self.y = y
 	def __str__(self):
 		result = "Point(" 				\
 				 + repr(self.x) + ", "	\
@@ -118,8 +119,8 @@ class Point:
 class Rgb:
 	def __init__(self, red=128, green=128, blue=128):
 		self.red = red
-		self.green = green 
-		self.blue = blue 
+		self.green = green
+		self.blue = blue
 	def __str__(self):
 		result = "Rgb(red:" + repr(self.red)	 \
 				  + " green:" + repr(self.green) \
@@ -172,7 +173,7 @@ def test_name():
 # ========================
 # try except 异常
 def div(a, b):
-	try: 
+	try:
 		return a/b
 	except ZeroDivisionError:
 		return 0
@@ -188,7 +189,7 @@ def test_build_in():
 	i = 65
 	c = bin(i)
 	print("65 to bin is:", c)
-	# 
+	#
 	print("complex multi is:", (2+2j)*(3+3j))
 	# --- dir（[object]) 列出对象的大部分属性
 	p = Point(1,2)
@@ -200,7 +201,7 @@ def test_build_in():
 	# --- filter(function, sequence) 返回一个列表，
 	#				调用function为真的sequence元素
 	# --- format(value[, format_spec]) 返回格式化后的字符串
-	
+
 # ========================
 # 主函数main
 def main():

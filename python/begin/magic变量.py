@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# 2023-03-15 整理
+# 一些魔法变量、常量
 import platform
 def test_bool():
 	print(int(True + True))
@@ -10,7 +13,7 @@ def main():
 	print(platform.release())
 	# 打印当前文件名 __file__  为完整路径名
 	print("full file name:\n",__file__)
-	file_name = str(__file__)	
+	file_name = str(__file__)
 	# 从右侧查找 / 出现的位置，提取短文件名
 	index = file_name.rfind("/")
 	short_name = file_name[index + 1:]
