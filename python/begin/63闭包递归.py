@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # 闭包closure，递归recursion
 
 def start_0603():
@@ -25,7 +25,7 @@ def test_makefunc():
 递归：Recursion
 base case:
 	基础问题：最小问题。
-recursive case:	
+recursive case:
 	递归问题：包含一个或多个递归调用
 	每个递归处理更小的问题。
 '''
