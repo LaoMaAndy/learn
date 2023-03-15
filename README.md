@@ -1,6 +1,6 @@
-Most comments are in simplified Chinese
-Learn and practice programming, etc.
-Knowledge is infinite
+Most comments are in simplified Chinese \n
+Learn and practice programming, etc. \n
+Knowledge is infinite \n
 welcome here
 Andy Lee, AndyLee765@gmail.com
 
