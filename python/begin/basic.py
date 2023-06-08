@@ -2,6 +2,25 @@
 # coding=utf-8
 
 '''
+Python之禅，作者Tim Peters
+漂亮胜于难看。
+显式胜于隐式。
+简单胜于复杂。
+复杂胜于凌乱。
+扁平胜于嵌套。
+分散胜于密集。
+可读性很重要！
+即使特例也不能破坏规则。
+虽然实用性胜过纯粹性，但错误处理不应因此忽略，除非明确声明对此忽略。
+面对歧义，拒绝猜测。
+实施方案应该直观，并且有、且最好只有一种。
+这样的方案可能一开始并不直观，除非你是荷兰人。（指Python创始人Guido）
+现在开始比永不开始要好。
+匆忙开始比永不开始更糟。
+如果实施方案难以解释，很可能是个坏方案。
+如果实施方案容易解释，很可能是个好方案。
+命名空间是一个很棒的想法————类似的事情我们要多做一些！
+
 The Zen of Python, by Tim Peters
 Beautiful is better than ugly.
 Explicit is better than implicit.
@@ -23,31 +42,12 @@ If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 
-Python之禅，作者Tim Peters
-美丽胜于丑陋。
-明了胜于晦涩。
-简洁胜于复杂。
-复杂胜于凌乱。
-扁平胜于嵌套。
-分散胜于密集。
-可读性很重要。
-特例并不足以打破规则。
-虽然实用性胜过纯粹性，但错误不应因此悄悄溜过，除非明确地对此沉默。
-面对模棱两可，拒绝猜测的诱惑。
-应该有一种——最好只有一种——显而易见的方法来做到这一点。
-虽然这种方式可能一开始并不明显，除非你是荷兰人。（这里的 Dutch 是指 Guido）
-现在开始比不做更好。
-然而匆忙开始更糟糕。
-如果方案难以解释，那是个坏方案。
-如果方案容易解释，那可能是个好方案。
-命名空间是一个很棒的想法——让我们做更多的这样的事情！
-
 Index of Python Enhancement Proposals
     https://peps.python.org/
 PEP 8 – Style Guide for Python Code
     https://peps.python.org/pep-0008/
 '''
-_ver = ""
+_ver = "1.00"
 def demo():
     print("demo:" + __name__)
 if __name__ == "__main__":

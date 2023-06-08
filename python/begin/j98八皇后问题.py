@@ -48,7 +48,6 @@ def queens(num = 8, state=()):
     '''
     八皇后问题。
     外层循环套用一个生成器，相当于两层循环
-
     '''
     for pos in range(num):
         if not conflict(state, pos):
