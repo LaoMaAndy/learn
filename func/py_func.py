@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
-file_string = '''python函数知识要点：
+'''python函数知识要点：
 
 定义函数 def
-文档字符串 docstring
+文档字符串 __doc__
     - 模块开始处
     - 函数名之后
-    - 可以给变量赋值
+    - 查看：f.__doc__
 符号表：
     - 局部，外层，全局
     - nonlocal, global
     - vars(), locals(), globals()
 参数：
     - 值传递，引用传递
-概念：函数名、函数对象、函数变量
-    f = fib
-    f100 = fib(100)
 返回值:
     - 无返回值时，为None
 函数参数的使用：
@@ -63,33 +60,135 @@ file_string = '''python函数知识要点：
         args = [3, 6]
         list(range(*args)) 
     - 使用 ** 解包字典
+函数概念：函数名、函数对象、函数变量，返回函数
+    - 函数对象 赋值 f = fib
+      相当于“别名”，新的变量名指向该函数的地址
+    - 获得函数返回值：
+        f100 = fib(100)
+        f100获取的是fib(100)的返回值
+函数嵌套：外层函数，内层函数
+    - 内层函数保留自己的变量表
+    - 内层函数可以 *读取* 外层函数的变量吗：可以
+    - 内层函数可以 *修改* 外层函数的变量吗：不可以
+    - 将内层函数作为返回值
+      有一个嵌套函数 
+      def outer(n): 
+        def inner(m):
+            return m + n
+        return inner
+    - 当使用 f = outer(n) 这样的语句时：
+        首先执行outer(n), 并设定内层函数的变量表
+        内层函数的变量表是分级的，可以标记本地和非本地
+        返回一个函数，相当于inner()
+        可以执行f(), 相当于调用内层函数
+        f()需要的参数，与内层函数相同
+        f()执行时，自带外层函数的变量值
 lambda表达式
     - 普通写法：lambda a, b: a+b，返回两个数的和
+    - 冒号之前的为参数；冒号之后的为返回的表达式
+    - 相当于一个函数，def inner(b): return a + b
+    - lambda可以使用外层函数的变量初始值
+    - 可以引用包含在作用域中的变量
     - 用于任何需要函数调用的地方
     - 只能是单个表达式
     - 语法糖
-    - 可以引用包含在作用域中的变量
     【特殊写法】
-      返回一个lambda函数
-        def make_incrementor(n):
-        return lambda x: x + n
-      把匿名函数作为参数传递：
+    - 把匿名函数作为参数传递：
         pairs = [(1, 'one'), (2, 'two'), (3, 'three'), (4, 'four')]
-        pairs.sort(key=lambda pair: pair[1])
+        pairs.sort(key=lambda p: p[1])
         pairs
         [(4, 'four'), (1, 'one'), (3, 'three'), (2, 'two')]
-
+函数注解 __annotations__
+    - 可选，函数的元数据完整信息
+    - 将函数的参数返回值类型全部标注清楚
+    - 使用__annotations__查看该属性
+    - 标注信息以字典方式存放
+    - 语法：def f(ham: str, eggs: str = 'eggs') -> str:
+    - 冒号后可以为表达式
+代码格式化 PEP 8
+    - 使用指令自动格式化
+    - 缩进，用 4 个空格，不要用制表符。
+    - 换行，一行不超过 79 个字符。
+    - 用空行分隔函数和类，及函数内较大的代码块。
+    - 最好把注释放到单独一行。
+    - 使用文档字符串。
+    - 运算符前后、逗号后要用空格
+    - 类名，用 UpperCamelCase
+    - 函数名，用 lowercase_with_underscores
+    - 方法中第一个参数总是用 self
+    - 使用 UTF-8 编写代码文件
+    - 不要在标识符中使用非 ASCII 字符。
 '''
-def increment(n):
-    return lambda x: x + n
+def ret_self(b=10, add=20):
+    '''返回函数自身
+    若返回自身函数，则相当于递归调用，
+    容易陷入死循环当中，需要设定终止条件'''
+    print("simple(b=10, add=20)", b, add)
+    f = simple(b=b+add)
+    return f
 
-def test_increment():
-    f = increment(10)
-    print(f(1))
-    print(f(2))
+def a_lambda(n):
+    ''' 返回一个lambda表达式
+    返回的表达式，相当于一个函数,
+    被赋值的变量相当于一个函数，参数为lambda表达式指定的参数，
+    该函数可以携带内部变量初始值，这些初始值是赋值时提供的'''
+    print("a_lambda(n):", n)
+    print('function vars:', vars())
+    return lambda x: x + n
+def test_a_lambda():
+    f = a_lambda(10)
+    print('test_a_lambda(), f(1)：',f(1))
+    print('test_a_lambda(), f(2)：',f(2))
+
+def outer_foo(outer_ref=0):
+    ''' 嵌套函数可以修改外层函数的变量吗？
+    可以读取，但不能修改'''
+    outer_n = 10
+    outer_str = 'abc'
+    print('--- 外层函数变量表 --- ')
+    for k, v in vars().items():
+        print('\t', k, ":", v)
+    def inner_foo():
+        inner_str = 'inner'
+        print('--- 内层函数变量表 ---')
+        # 只有使用过的外层变量，才会出现在内层函数变量表中
+        outer_n
+        outer_str
+        # 不可以给外层变量赋值，提示：cannot access local variable
+        # outer_n = 20 
+        for k, v in vars().items():
+            print('\t', k, ":", v)
+    inner_foo()
+    outer_n = 222
+    print('改变一下外层函数的变量, n =', outer_n)
+    inner_foo()
+
+def outer_func(outer_arg, s = 'outer'):
+    '''在函数内部定义一个函数，并返回该函数'''
+    outer_i = outer_arg
+    outer_str = s
+    outer_list = list('outer')
+    print('--- 外层函数变量表 --- ')
+    for k, v in vars().items():
+        print('\t', k, ":", v)
+    def inner(inner_arg):
+        inner_str = 'inner'
+        inner_int = 99
+        print('--- 内层函数变量表 --- ')
+        for k, v in vars().items():
+            print('\t', k, ":", v)
+        return inner_arg + outer_arg
+    return inner
+
+def test_ret_func():
+    f777 = outer_func(777, s='777')
+    f55 = outer_func(55, s='55')
+    print('return value:', f777(111))
+    print('return value:', f55(44))
 
 def small_talk(greet, name='', chat=''):
-    '''首先打印greet, 循环打印name: , 逐条打印chat'''
+    '''打印列表
+    首先打印greet, 循环打印name: , 逐条打印chat'''
     print(greet)
     #print('name:', name)
     #print('chat:', chat)
@@ -102,7 +201,6 @@ def small_talk(greet, name='', chat=''):
         print(name[m], ':', end = ' ')
         m += 1
         print(i)
-
 def test_small_talk():
     greet = 'Time is 4pm'
     name = ['Me', 'Alice']
@@ -162,13 +260,13 @@ def test_share_list_arg():
     print(share_list_arg(None))
 
 def dont_share_list_arg(i, arg=None):
-    '''特殊写法：
+    '''成语写法：
     避免函数参数共享可变类型：
     若避免该情况，需 arg=None
     然后在函数内部 arg=[]
-    
     '''
-    arg=[]
+    if arg is None:
+        arg = []
     arg.append(i)
     return arg
 def test_dont_share_list_arg():
@@ -242,18 +340,20 @@ def test_no_return():
 
 if __name__ == '__main__':
     def demo():
-        print(file_string)
-        test_feb_prn()
-        test_no_return()
-        test_ref_func()
-        test_print_int()
-        test_feb()
-        test_print_list()
-        test_share_list_arg()
-        test_dont_share_list_arg()
-        test_small_talk()
-        test_increment()
-    print(file_string)
+        # print(file_string)
+        # test_feb_prn()
+        # test_no_return()
+        # test_ref_func()
+        # test_print_int()
+        # test_feb()
+        # test_print_list()
+        # test_share_list_arg()
+        # test_dont_share_list_arg()
+        # test_small_talk()
+        # test_a_lambda()
+        test_ret_func()
+        # outer_foo()
+    print(__doc__)
     demo()
 
     
