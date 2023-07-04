@@ -28,12 +28,20 @@ python3 命令行与环境
     启动文件 PYTHONSTARTUP 和定制模块
 交互模式
     主提示符，次要提示符
-字符编码
+可执行脚本、字符编码
+    #!/usr/bin/env python3
+    # -*- coding: code-name -*-
     UTF-8
     编码和字体
-    # -*- coding: code-name -*-
-可执行的脚本
-    #!/usr/bin/env python3
+注释
+    以#(读作：hash)开头的整行
+将Python解释器作为一个计算器
+    四则运算：+, -, *, /
+    整除运算：//, %
+    幂运算： ** 
+    给变量赋值： = 
+    转换为浮点数：包含浮点数的表达式
+    最后打印的变量： _
 '''
 
 if __name__ == '__main__':
