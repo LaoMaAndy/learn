@@ -21,6 +21,7 @@ by Tim Peters
     If the implementation is hard to explain, it's a bad idea.
     If the implementation is easy to explain, it may be a good idea.
     Namespaces are one honking great idea -- let's do more of those!
+Python was Designed by Guido van Rossum.
 
 Python真言
 作者Tim Peters
@@ -41,6 +42,7 @@ Python真言
     如果实施方案难以解释，很可能是个坏方案。
     如果实施方案容易解释，很可能是个好方案。
     命名空间是一个很棒的想法————类似的事情我们要多做一些！
+Python的设计者是Guido van Rossum
 '''
 if __name__ == "__main__":
     print(__doc__)
