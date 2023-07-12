@@ -64,14 +64,24 @@ Python流程控制 statements
       其中，下划线 _ 必定匹配成功
     多个值组合 ｜ 或 or : 
       case 401 | 402 | 404
+    match 捕获变量：
     case 中可以组合变量和字面值：
       case (x, y):
-    解包赋值：
-      (x, y) = point
-
+    对象绑定：
+      case Point(x=x_val, y=y_val):
+    match语句赋值规则：
+      只有独立名称被赋值，
+      带点号的名称foo.bar，属性名称x=和y=不被赋值
+      类名称不被赋值
+    守卫子句：
+      case Point(x, y) if x == y:
+    as子句：
+      case (Point(x1, y1), Point(x2, y2) as p2):
+    文档：
+    docs.python.org/3/tutorial/controlflow.html
 ## 循环的技巧
     enumerate()
-    https://docs.python.org/zh-cn/3/tutorial/datastructures.html#tut-loopidioms
+    docs.python.org/zh-cn/3/tutorial/datastructures.html#tut-loopidioms
 
 ''' 
 import math
@@ -80,22 +90,26 @@ class Point:
         self.x = x
         self.y = y
 def where_is(p):
+    '''match 的变量绑定到类对象
+    有些地方还不是太明白。
+
+    '''
     match p:
-        case Point(x_cod=0, y=0):
+        case Point(x=0, y=0):
             print("Origin")
-        case Point(x=0, y=y):
-            print(f"Y={y}")
-        case Point(x=x, y=0):
-            print(f"X={x}")
-        case Point(x=x, y=y):
-            print('Somewhere:', f"x={x}, y={y}")
+        case Point(x=0, y=y_val):
+            print(f"Y={y_val}")
+        case Point(x=x_val, y=0):
+            print(f"X={x_val}")
+        case Point(x=x_val, y=y_val):
+            print('Somewhere:', f"x={x_val}, y={y_val}")
         case _:
             print('Not a Point')
 
 def test_where_is():
     a = Point(0, 100)
     b = Point(200, 0)
-    c = Point(123, 123)
+    c = Point(123, 456)
     where_is(a)
     where_is(b)
     where_is(c)
