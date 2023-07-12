@@ -59,37 +59,67 @@ Python流程控制 statements
       while True:
         pass
 ## match 语句
-    
+    将一个目标值与多个字面值比较
+    格式 match ... case  ... _
+      其中，下划线 _ 必定匹配成功
+    多个值组合 ｜ 或 or : 
+      case 401 | 402 | 404
+    case 中可以组合变量和字面值：
+      case (x, y):
+    解包赋值：
+      (x, y) = point
+
 ## 循环的技巧
     enumerate()
     https://docs.python.org/zh-cn/3/tutorial/datastructures.html#tut-loopidioms
 
 ''' 
 import math
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+def where_is(p):
+    match p:
+        case Point(x_cod=0, y=0):
+            print("Origin")
+        case Point(x=0, y=y):
+            print(f"Y={y}")
+        case Point(x=x, y=0):
+            print(f"X={x}")
+        case Point(x=x, y=y):
+            print('Somewhere:', f"x={x}, y={y}")
+        case _:
+            print('Not a Point')
 
-def is_prime(i, prn='no_print'):
-    y_str = 'yYyesYESYesTrueTRUE'
-    if y_str.find(prn) == -1:
-        prn_or_not = False
-    else:
-        prn_or_not = True
+def test_where_is():
+    a = Point(0, 100)
+    b = Point(200, 0)
+    c = Point(123, 123)
+    where_is(a)
+    where_is(b)
+    where_is(c)
 
-    l = []
+
+def is_prime(n):
+    max_factor = int(math.sqrt(n)) + 1 
+    # max_factor = n
+    for i in range(2, max_factor):
+        if n % i == 0:
+            # print(n, '=', i , '*', n//i)
+            return False
+    # print(n, 'is a prime.')
+    return True
+
+def list_prime(i):
+    ret = []
     for n in range(2, i):
-        max_factor = int(math.sqrt(n))
-        # max_factor = n
-        for x in range(2, max_factor):
-            if n % x == 0:
-                if prn_or_not:
-                    print(n, '=', x, '*', n // x)
-                break
-        else:
-            if prn_or_not:
-                print(n, ': prime')
-            l.append(n)
-    return l
-def test_is_prime():
-    print(is_prime(1_000_000, prn='Y'))
+        if is_prime(n):
+            ret.append(n)
+    return ret
+
+def test_list_prime():
+    print(list_prime(100))
 
 
 def else_clause():
@@ -126,6 +156,7 @@ if __name__ == '__main__':
         print('here is test:')
         iter_col()
         else_clause()
-        test_is_prime()
+        test_list_prime()
+        test_where_is()
         pass
     test()
