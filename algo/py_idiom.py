@@ -2,6 +2,9 @@
 file_string='''\
 Idiom of python language.
 Python的一些习惯写法，成语以及一些容易出问题的片段。\
+## 函数默认参数问题：
+    def share_arg(i, arg=[])
+
 '''
 
 ## 函数定义相关 ##
@@ -24,17 +27,6 @@ def test_share_arg():
     print(share_arg(222))
     print(share_arg(None))
 
-def dont_share_arg(i, arg=None):
-    '''特殊写法
-    避免函数参数共享可变类型：
-    若避免该情况，需 arg=None
-    然后在函数内部 arg=[]
-    
-    '''
-    arg=[]
-    arg.append(i)
-    return arg
-
 def dont_share_list_arg(i, arg=None):
     '''成语写法：
     避免函数参数共享可变类型：
@@ -46,16 +38,16 @@ def dont_share_list_arg(i, arg=None):
     arg.append(i)
     return arg
 
-def test_dont_share_arg():
+def test_dont_share_list_arg():
     print('Function dont share an argument:')
-    print(dont_share_arg(100))
-    print(dont_share_arg('share'))
+    print(dont_share_list_arg(100))
+    print(dont_share_list_arg('share'))
 
 
 if __name__ == '__main__':
     def demo():
         test_share_arg()
-        test_dont_share_arg()
+        test_dont_share_list_arg()
         pass
     print(file_string)
     demo()
