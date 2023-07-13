@@ -34,6 +34,18 @@ def dont_share_arg(i, arg=None):
     arg=[]
     arg.append(i)
     return arg
+
+def dont_share_list_arg(i, arg=None):
+    '''成语写法：
+    避免函数参数共享可变类型：
+    若避免该情况，需 arg=None
+    然后在函数内部 arg=[]
+    '''
+    if arg is None:
+        arg = []
+    arg.append(i)
+    return arg
+
 def test_dont_share_arg():
     print('Function dont share an argument:')
     print(dont_share_arg(100))

@@ -18,7 +18,7 @@
     - 定义时、调用时
 函数参数：
     - 型参 formal parameter / argument
-    - 参数默认值
+    - 默认参数值
     - 默认值可以使用变量，但只求值一次
     - 关键字参数 keyword argument
         也叫做 named parameter
