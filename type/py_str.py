@@ -3,6 +3,7 @@ r'''
 ## str类型
     空格分隔的字符串会被合并
       ("spam " "eggs") == "spam eggs"
+    
 '''
 
 if __name__ == '__main__':
