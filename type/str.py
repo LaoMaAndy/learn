@@ -181,6 +181,52 @@ str.rsplit(sep=None, maxsplit=- 1)
 
 str.split(sep=None, maxsplit=- 1)
     返回一个列表
+    连续的空字符视为单个分隔符
+    连续的分隔符被视为分隔空字符串
+    起始和结束处的分隔符视为头尾处存在空字符串
+    '|this|is|a|'.split('|') 得到
+       ['', 'this', 'is', 'a', '']
+
+str.splitlines(keepends=False)
+    拆分原字符串中的各行
+    不包含行边界
+    若keepends=True，则保留分行符
+    不同于 split()，当给出了分隔字符串 sep 时，
+      对于空字符串此方法将返回一个空列表，
+      而末尾的换行不会令结果中增加额外的行:
+
+str.startswith(prefix[, start[, end]])
+    判断是否前缀
+    如果字符串以指定的 prefix 开始则返回 True，
+      否则返回 False。 
+
+str.strip([chars])
+    删除前后字符
+    返回原字符串的副本，移除其中的前导和末尾字符。
+    移除的方法是 chars 中的所有字符
+
+str.swapcase()
+    大小写转换
+    但s.swapcase().swapcase() == s
+    不一定总为真
+
+str.title()
+    每个单词首字母大写
+    其余字母小写
+    但有时处理撇号会不正确
+    string.capwords() 函数没有此问题，因为它只用空格来拆分单词。
+
+str.translate(table)
+    按映射表转换
+    可使用 str.maketrans()创建一个转换表
+
+str.upper()
+    转换为大写
+    返回原字符串的副本，其中所有区分大小写的字符 4 均转换为大写。 
+
+str.zfill(width)
+    在+/-后填充0，长度变为width
+
 '''
 import sys 
 sys.path.append('../public') 
@@ -210,6 +256,7 @@ def test_is():
             "'we are the world'.rsplit()","拆分字符串",
             r"'c:\windows\sys'.split('\\')","拆分字符串",
             "'|this|is|a|'.split('|')","拆分字符串",
+            "'This'.swapcase()","大小写转换",
             "' '","",
             "' '","",
           ]
