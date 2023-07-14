@@ -36,6 +36,12 @@ literal_char      ::=  <any code point except "{", "}" or NULL>
       format(value, format_spec) 
       format specifier mini-language
 
+#printf 风格字符串格式化
+注意：此风格会导致一些问题。尽量避免使用
+
+
+    
+
 '''
 
 if __name__ == '__main__':
