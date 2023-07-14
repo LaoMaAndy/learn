@@ -82,7 +82,7 @@ Python运算符
 '''
 import math
 import sys
-sys.path.append('../public') 
+sys.path.append('./public') 
 
 from print_exp import *
 
