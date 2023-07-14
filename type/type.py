@@ -157,16 +157,14 @@ r'''
     求列表长度 len()
     列表可以嵌套
 '''
-def int_or_float():
-    r'''
-不同表达式的值和类型
-    显示不同类型的运算，及结果类型
 
-    另，此处可为惯用成语：
-    字段列表、宽度值 
-    -> 使用‘推导’，生成格式化，列表
-    -> 将列表join格式化字符串
-    -> print(格式串.format(*字段列表))
+import sys 
+sys.path.append('../public') 
+from print_exp import *
+
+def int_or_float():
+    r'''不同表达式的值和类型
+    显示不同类型的运算，及结果类型
     '''
     exp_list = [
         '3 + 4 - 9 + 4*5', '整数运算结果类型为整数',
@@ -185,25 +183,7 @@ def int_or_float():
         '"abcdef"[-12:21]' , '起始和终止位置任意',
         '"abcdef"[21:-42]' , '起始和终止位置任意',
     ]
-    # column name and width
-    col = ['express', 'result', 'result type', 'comment']
-    width = [20, 15, 20, 20]
-    # generate format string into a list, then
-    # join the list into one format string
-    fmt_list = ['{:' + str(x) + '}' for x in width]
-    fmt = ' ' + ' '.join(fmt_list)
-    # generate a separate line: |---|----|----
-    sep_list = ['|' + '-' * x for x in width]
-    sep = ''.join(sep_list)
-    print('format string:', fmt)
-    print(sep)
-    print(fmt.format(*col))
-    print(sep)
-    for i in range(0, len(exp_list), 2):
-        print(fmt.format(exp_list[i], 
-                         str(eval(exp_list[i]))[:9], 
-                         str(type(eval(exp_list[i]))), 
-                         exp_list[i + 1]))
+    print_exp(exp_list)
 
 if __name__ == '__main__':
     def test():

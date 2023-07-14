@@ -81,6 +81,10 @@ Python运算符
 
 '''
 import math
+import sys
+sys.path.append('../public') 
+
+from print_exp import *
 
 def opr_bool():
     ''' 布尔运算 '''
@@ -103,21 +107,8 @@ def opr_bool():
                 'math.ceil(3.2)', 'ceil: 向上取整',
                 'math.ceil(-3.2)', 'ceil: 向上取整',
                 ]
-    width = [20, 10, 16, 20]
-    col = ['express', 'value', 'type', 'comment']
-    fmt_list = ['{:' + str(x) + '}' for x in width]
-    fmt = ' ' + ' '.join(fmt_list)
-    sep_list = ['|' + '-' * x for x in width]
-    sep = ''.join(sep_list)
-    print(sep)
-    print(fmt.format(*col))
-    print(sep)
-    for i in range(0, len(exp_list), 2):
-        v = eval(exp_list[i])
-        print(fmt.format(exp_list[i], 
-                         str(v)[:10],
-                         str(type(v)),
-                         exp_list[i + 1]))
+    print_exp(exp_list)
+
 
 if __name__ == '__main__':
     print(__doc__)
