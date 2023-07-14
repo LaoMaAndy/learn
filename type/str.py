@@ -17,28 +17,6 @@ r'''
     自定义字符串格式化
     printf 风格字符串格式化
 
-
-词法规则：
-f_string          ::=  (literal_char | "{{" | "}}" | replacement_field)*
-replacement_field ::=  "{" f_expression ["="] ["!" conversion] [":" format_spec] "}"
-f_expression      ::=  (conditional_expression | "*" or_expr)
-                         ("," conditional_expression | "," "*" or_expr)* [","]
-                       | yield_expression
-conversion        ::=  "s" | "r" | "a"
-format_spec       ::=  (literal_char | NULL | replacement_field)*
-literal_char      ::=  <any code point except "{", "}" or NULL>
-
-其中：
-  双花括号 '{{' 或 '}}' 被替换为单花括号
-  转换符   '!s' 调用 str() 转换求值结果，
-          '!r' 调用 repr()，
-          '!a' 调用 ascii()。
-  : 冒号后面是 format specifiers，
-      调用传入表达式或转换结果的 __format__() 方法
-      format(value, format_spec) 
-      format specifier mini-language
-      查看 format 格式迷你语言
-
 # 字符串方法
 ## str.capitalize()
     首字母大写
@@ -92,6 +70,7 @@ str.find(sub[, start[, end]])
 
 str.format(*args, **kwargs)
     格式化
+
 '''
 import sys 
 sys.path.append('../public') 
