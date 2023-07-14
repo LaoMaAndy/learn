@@ -90,7 +90,8 @@ str.find(sub[, start[, end]])
       find()仅应该用于查找位置时使用
       如果检查是否存在sub，应使用 in 操作符
 
-
+str.format(*args, **kwargs)
+    格式化
 '''
 import sys 
 sys.path.append('../public') 
