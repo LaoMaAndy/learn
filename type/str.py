@@ -70,11 +70,161 @@ str.find(sub[, start[, end]])
 
 str.format(*args, **kwargs)
     格式化
+    "Sum 1+2 is {0}".format(1+2)
 
+str.format_map(mapping)
+    格式化
+    相当于str.format(**mapping)
+    不同之处在于mapping直接使用，而不会复制到dict
+
+str.index(sub[, start[, end]])
+    索引
+    功能类似于find(), 但找不到时引发 ValueError
+
+# is 系列函数
+str.isalnum()
+    字母和数字
+    空白字符串返回False
+str.isalpha()
+    字母
+str.isascii()
+    ASCII码
+str.isdecimal()
+    十进制
+str.isdigit()
+    数字
+    此处isdecimal()和isdigit()有细微差别
+str.isidentifier()
+    标识符
+keyword.iskeyword() 
+    关键字
+str.islower()
+    小写
+str.isnumeric()
+    数值
+str.isprintable()
+    可打印
+    空格或空字符串为True
+str.isspace()
+    空白字符串
+    空字串为False
+str.istitle()
+    标题字符串
+str.isupper()
+    大写
+
+str.join(iterable)
+    拼接
+    iterable中必须全部是str对象
+    str作为元素之间的分隔
+
+str.ljust(width[, fillchar])
+    左对齐
+    并用fillchar填充空白，默认空格
+    如width小于len(),则返回副本
+
+str.lower()
+    小写
+
+str.lstrip([chars])
+    移除左侧字符
+    chars 指定字符。默认移除空白字符
+    chars 中的所有字符都移除，直到遇到
+      第一个非chars中字符为止
+
+static str.maketrans(x[, y[, z]])
+    静态方法
+    返回一个可供 str.translate() 使用的转换对照表。
+
+str.partition(sep)
+    拆分
+    返回一个3元组，
+    包含分隔之前的部分、分隔符、后面的部分
+    若没找到，则返回本身和两个空白串
+
+str.removeprefix(prefix, /)
+    删除前缀
+    如果字符串以 prefix 字符串开头，
+      则返回 string[len(prefix):]
+    否则返回副本
+
+str.removesuffix(suffix, /)
+    删除后缀
+    如果字符串以 suffix 字符串结尾，
+        返回 string[:-len(suffix)]
+    否则返回副本
+
+str.replace(old, new[, count])
+    替换
+    将old替换为new, 替换前 count 次
+
+str.rfind(sub[, start[, end]])
+    反向查找
+    如果没找到，则返回-1
+
+str.rindex(sub[, start[, end]])
+    类似于 rfind()，
+    但在子字符串 sub 未找到时会引发 ValueError。
+
+str.rjust(width[, fillchar])
+    向右侧对齐
+
+str.rpartition(sep)
+    类似于partition()
+    从结尾处开始
+
+str.rsplit(sep=None, maxsplit=- 1)
+    返回一个列表
+    从结尾处开始，拆分字符串，
+    maxsplit 为最大拆分次数
+    sep如果不指定，默认空白字符
+
+str.split(sep=None, maxsplit=- 1)
+    返回一个列表，
 '''
 import sys 
 sys.path.append('../public') 
-from print_exp import *
+from print_exp import print_exp
+from keyword import iskeyword
+
+def test_is():
+    print('test_is()'.center(40, '*'))
+    exp = ['"12345".isalnum()', '字母和数字',
+           '"  ".isalnum()', '空白字符串返回False',
+           '"abc".isalpha()', '是否全部字母',
+           '"123e2".isdecimal()', '是否全部十进制字符',
+           '"123abc".isdigit()', '是否全部十进制字符',
+           '"def".isidentifier()', '是否有效的标识符号',
+           'iskeyword("def")', '是否有效的关键字',
+           '"1290".isnumeric()','是否数值字符',
+           '"   ".isprintable()','空白字符串为True',
+           '"  \t".isspace()','是否空白字串',
+           '"".isspace()','空字符串为False',
+           '"-".join(["1", "2", "3"])','拼接字符串',
+            "' spacious '.lstrip()","移除左侧空白",
+            "'www.exam.com'.lstrip('cmowz.')","移除指定字符",
+            "'thisis'.partition('i')","分隔字符串",
+            "'www.a.com'.removeprefix('www.')","删除前导字符串",
+            "'www.a.com'.removesuffix('.com')","删除后缀字符串",
+            "'abcabc'.rfind('abc')","从右侧查找",
+            "'we are the world'.rsplit()","拆分字符串",
+            r"'c:\windows\sys'.split('\\')","拆分字符串",
+            "'|this|is|a|'.split('|')","拆分字符串",
+            "' '","",
+            "' '","",
+          ]
+    print_exp(exp, [35, 25, 15, 20])
+
+def test_format_map():
+    print('test_format_map()'.center(40, '*'))
+    class Default(dict):
+        def __missing__(self, key):
+            return key
+
+    s = '{name} was born in {country}'.format_map(Default(name='Guido'))
+    # s: Guido was born in country
+    print(s)
+
 
 def test_find():
     print('test_find()'.center(40, '*'))
@@ -129,4 +279,6 @@ if __name__ == '__main__':
         test_count()
         test_endswith()
         test_find()
+        test_format_map()
+        test_is()
     test()

@@ -27,9 +27,10 @@ literal_char      ::=  <any code point except "{", "}" or NULL>
 
 其中：
   双花括号 '{{' 或 '}}' 被替换为单花括号
-  转换符   '!s' 调用 str() 转换求值结果，
-          '!r' 调用 repr()，
-          '!a' 调用 ascii()。
+  转换符   
+    '!s' 调用 str() 转换求值结果，
+    '!r' 调用 repr()，
+    '!a' 调用 ascii()。
   : 冒号后面是 format specifiers，
       调用传入表达式或转换结果的 __format__() 方法
       format(value, format_spec) 

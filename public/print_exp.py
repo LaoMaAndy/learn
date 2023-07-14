@@ -7,6 +7,8 @@ r'''打印表达式 / 值 / 值类型 / 备注信息
     -> print(格式串.format(*字段列表))
 '''
 import math
+import sys
+from keyword import iskeyword
 
 def print_exp(exp, width=None, title=None):
     if width == None:
@@ -27,8 +29,8 @@ def print_exp(exp, width=None, title=None):
     for i in range(0, len(exp), 2):
         v = eval(exp[i])
         print(fmt.format(exp[i], 
-                         str(v)[:10],
-                         str(type(v)),
+                         repr(v),
+                         repr(type(v)),
                          exp[i + 1]))
 
 
