@@ -180,7 +180,7 @@ str.rsplit(sep=None, maxsplit=- 1)
     sep如果不指定，默认空白字符
 
 str.split(sep=None, maxsplit=- 1)
-    返回一个列表，
+    返回一个列表
 '''
 import sys 
 sys.path.append('../public') 
