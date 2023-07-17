@@ -16,13 +16,19 @@ def is_prime(n):
 
 def list_prime(i):
     ret = []
-    for n in range(2, i):
-        if is_prime(n):
+    for n in range(2, i + 1):
+        max_factor = int(math.sqrt(n)) + 1 
+        for i in range(2, max_factor):
+        #for i in range(2, n):
+            if n % i == 0:
+                break
+        else:
             ret.append(n)
     return ret
 
 def test_list_prime():
-    print(list_prime(100))
+    #print(list_prime(100))
+    print(list_prime(1_000_000))
 
 if __name__ == '__main__':
     test_list_prime()
