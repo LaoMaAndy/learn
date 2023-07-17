@@ -18,13 +18,14 @@ r'''
     printf 风格字符串格式化
 
 # 字符串方法
-## str.capitalize()
+支持一般序列的操作
+str.capitalize()
     首字母大写
     返回字符串副本，其中首个字符大写，其余为小写。
     注意：将首个字母改为大写，同时
          将其余字母改为小写
 
-## str.casefold()
+str.casefold()
     转小写
     返回消除大小写的副本
     用于忽略大小写的匹配
@@ -33,29 +34,29 @@ r'''
       casefold()将其修改为"ss"
       大小写转换见 Unicode 标准的 3.13 节
 
-## str.center(width[, fillchar])
+str.center(width[, fillchar])
     居中
     返回一个字符串副本，原字符串居中
     fillchar 只能为一个字符
     若 width 小于 len(s), 则返回副本
 
-## str.count(sub[, start[, end]])
+str.count(sub[, start[, end]])
     统计
     返回sub在范围内非重叠出现的次数
     start, end 规则类似于切片
     如果sub为空，则返回len(s) + 1
 
-## str.encode(encoding='utf-8', errors='strict')
+str.encode(encoding='utf-8', errors='strict')
     编码
     编解码器
 docs.python.org/zh-cn/3/library/codecs.html#standard-encodings
     
-## str.endswith(suffix[, start[, end]])
+str.endswith(suffix[, start[, end]])
     后缀
     如果字符串后缀为suffix, 则返回True，否则False
     suffix 可以是元组 ()
 
-## str.expandtabs(tabsize=8)
+str.expandtabs(tabsize=8)
     替换tab符
     将tab符替换为空格
     如果多个tab，则会计算制表位
