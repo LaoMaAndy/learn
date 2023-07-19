@@ -69,8 +69,23 @@ set 对象是由具有唯一性的 hashable 对象所组成的无序多项集。
     intersection_update(*others) 或 set &= other & ...
       更新集合，只保留其中在所有 others 中也存在的元素。
 
+    difference_update(*others) 或 set -= other | ...
+      更新集合，移除其中也存在于 others 中的元素。
 
+    symmetric_difference_update(other) 或 set ^= other
+      更新集合，只保留存在于集合的一方而非共同存在的元素。
 
+    add(elem) 将元素 elem 添加到集合中。
+
+    remove(elem) 从集合中移除元素 elem。 
+        如果 elem 不存在于集合中则会引发 KeyError。
+
+    discard(elem) 如果元素 elem 存在于集合中则将其移除。
+
+    pop() 从集合中移除并返回任意一个元素。 
+        如果集合为空则会引发 KeyError。
+    
+    clear() 从集合中移除所有元素。
 
 '''
 if __name__ == '__main__':
