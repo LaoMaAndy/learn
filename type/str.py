@@ -19,214 +19,216 @@ r'''
 
 # 字符串方法
 支持一般序列的操作
-str.capitalize()
-    首字母大写
-    返回字符串副本，其中首个字符大写，其余为小写。
-    注意：将首个字母改为大写，同时
-         将其余字母改为小写
+其他方法
+    str.capitalize()
+      首字母大写
+      返回字符串副本，其中首个字符大写，其余为小写。
+      注意：将首个字母改为大写，同时
+           将其余字母改为小写
 
-str.casefold()
-    转小写
-    返回消除大小写的副本
-    用于忽略大小写的匹配
-    德语小写字母 'ß' 相当于 "ss"
-      lower() 不会对'ß'做任何改变
-      casefold()将其修改为"ss"
-      大小写转换见 Unicode 标准的 3.13 节
+    str.casefold()
+      转小写
+      返回消除大小写的副本
+      用于忽略大小写的匹配
+      德语小写字母 'ß' 相当于 "ss"
+        lower() 不会对'ß'做任何改变
+        casefold()将其修改为"ss"
+        大小写转换见 Unicode 标准的 3.13 节
 
-str.center(width[, fillchar])
-    居中
-    返回一个字符串副本，原字符串居中
-    fillchar 只能为一个字符
-    若 width 小于 len(s), 则返回副本
+    str.center(width[, fillchar])
+      居中
+      返回一个字符串副本，原字符串居中
+      fillchar 只能为一个字符
+      若 width 小于 len(s), 则返回副本
 
-str.count(sub[, start[, end]])
-    统计
-    返回sub在范围内非重叠出现的次数
-    start, end 规则类似于切片
-    如果sub为空，则返回len(s) + 1
+    str.count(sub[, start[, end]])
+      统计
+      返回sub在范围内非重叠出现的次数
+      start, end 规则类似于切片
+      如果sub为空，则返回len(s) + 1
 
-str.encode(encoding='utf-8', errors='strict')
-    编码
-    编解码器
-docs.python.org/zh-cn/3/library/codecs.html#standard-encodings
-    
-str.endswith(suffix[, start[, end]])
-    后缀
-    如果字符串后缀为suffix, 则返回True，否则False
-    suffix 可以是元组 ()
+    str.encode(encoding='utf-8', errors='strict')
+      编码
+      编解码器
+      docs.python.org/zh-cn/3/library/codecs.html#standard-encodings
+      
+    str.endswith(suffix[, start[, end]])
+      后缀
+      如果字符串后缀为suffix, 则返回True，否则False
+      suffix 可以是元组 ()
 
-str.expandtabs(tabsize=8)
-    替换tab符
-    将tab符替换为空格
-    如果多个tab，则会计算制表位
+    str.expandtabs(tabsize=8)
+      替换tab符
+      将tab符替换为空格
+      如果多个tab，则会计算制表位
 
-str.find(sub[, start[, end]])
-    查找
-    返回sub在字符串切片[start:end]中的最小索引
-    如果未找到，返回-1
-    注：
-      find()仅应该用于查找位置时使用
-      如果检查是否存在sub，应使用 in 操作符
+    str.find(sub[, start[, end]])
+      查找
+      返回sub在字符串切片[start:end]中的最小索引
+      如果未找到，返回-1
+      注：
+        find()仅应该用于查找位置时使用
+        如果检查是否存在sub，应使用 in 操作符
 
-str.format(*args, **kwargs)
-    格式化
-    "Sum 1+2 is {0}".format(1+2)
+    str.format(*args, **kwargs)
+      格式化
+      "Sum 1+2 is {0}".format(1+2)
 
-str.format_map(mapping)
-    格式化
-    相当于str.format(**mapping)
-    不同之处在于mapping直接使用，而不会复制到dict
+    str.format_map(mapping)
+      格式化
+      相当于str.format(**mapping)
+      不同之处在于mapping直接使用，而不会复制到dict
 
-str.index(sub[, start[, end]])
-    索引
-    功能类似于find(), 但找不到时引发 ValueError
+    str.index(sub[, start[, end]])
+      索引
+      功能类似于find(), 但找不到时引发 ValueError
 
-# is 系列函数
-str.isalnum()
-    字母和数字
-    空白字符串返回False
-str.isalpha()
-    字母
-str.isascii()
-    ASCII码
-str.isdecimal()
-    十进制
-str.isdigit()
-    数字
-    此处isdecimal()和isdigit()有细微差别
-str.isidentifier()
-    标识符
-keyword.iskeyword() 
-    关键字
-str.islower()
-    小写
-str.isnumeric()
-    数值
-str.isprintable()
-    可打印
-    空格或空字符串为True
-str.isspace()
-    空白字符串
-    空字串为False
-str.istitle()
-    标题字符串
-str.isupper()
-    大写
+is系列方法
+    str.isalnum()
+      字母和数字
+      空白字符串返回False
+    str.isalpha()
+      字母
+    str.isascii()
+      ASCII码
+    str.isdecimal()
+      十进制
+    str.isdigit()
+      数字
+      此处isdecimal()和isdigit()有细微差别
+    str.isidentifier()
+      标识符
+    keyword.iskeyword() 
+      关键字
+    str.islower()
+      小写
+    str.isnumeric()
+      数值
+    str.isprintable()
+      可打印
+      空格或空字符串为True
+    str.isspace()
+      空白字符串
+      空字串为False
+    str.istitle()
+      标题字符串
+    str.isupper()
+      大写
 
-str.join(iterable)
-    拼接
-    iterable中必须全部是str对象
-    str作为元素之间的分隔
+其他方法
+    str.join(iterable)
+      拼接
+      iterable中必须全部是str对象
+      str作为元素之间的分隔
 
-str.ljust(width[, fillchar])
-    左对齐
-    并用fillchar填充空白，默认空格
-    如width小于len(),则返回副本
+    str.ljust(width[, fillchar])
+      左对齐
+      并用fillchar填充空白，默认空格
+      如width小于len(),则返回副本
 
-str.lower()
-    小写
+    str.lower()
+      小写
 
-str.lstrip([chars])
-    移除左侧字符
-    chars 指定字符。默认移除空白字符
-    chars 中的所有字符都移除，直到遇到
-      第一个非chars中字符为止
+    str.lstrip([chars])
+      移除左侧字符
+      chars 指定字符。默认移除空白字符
+      chars 中的所有字符都移除，直到遇到
+        第一个非chars中字符为止
 
-static str.maketrans(x[, y[, z]])
-    静态方法
-    返回一个可供 str.translate() 使用的转换对照表。
+    static str.maketrans(x[, y[, z]])
+      静态方法
+      返回一个可供 str.translate() 使用的转换对照表。
 
-str.partition(sep)
-    拆分
-    返回一个3元组，
-    包含分隔之前的部分、分隔符、后面的部分
-    若没找到，则返回本身和两个空白串
+    str.partition(sep)
+      拆分
+      返回一个3元组，
+      包含分隔之前的部分、分隔符、后面的部分
+      若没找到，则返回本身和两个空白串
 
-str.removeprefix(prefix, /)
-    删除前缀
-    如果字符串以 prefix 字符串开头，
-      则返回 string[len(prefix):]
-    否则返回副本
+    str.removeprefix(prefix, /)
+      删除前缀
+      如果字符串以 prefix 字符串开头，
+        则返回 string[len(prefix):]
+      否则返回副本
 
-str.removesuffix(suffix, /)
-    删除后缀
-    如果字符串以 suffix 字符串结尾，
+    str.removesuffix(suffix, /)
+      删除后缀
+      如果字符串以 suffix 字符串结尾，
         返回 string[:-len(suffix)]
-    否则返回副本
+      否则返回副本
 
-str.replace(old, new[, count])
-    替换
-    将old替换为new, 替换前 count 次
+    str.replace(old, new[, count])
+      替换
+      将old替换为new, 替换前 count 次
 
-str.rfind(sub[, start[, end]])
-    反向查找
-    如果没找到，则返回-1
+    str.rfind(sub[, start[, end]])
+      反向查找
+      如果没找到，则返回-1
 
-str.rindex(sub[, start[, end]])
-    类似于 rfind()，
-    但在子字符串 sub 未找到时会引发 ValueError。
+    str.rindex(sub[, start[, end]])
+      类似于 rfind()，
+      但在子字符串 sub 未找到时会引发 ValueError。
 
-str.rjust(width[, fillchar])
-    向右侧对齐
+    str.rjust(width[, fillchar])
+      向右侧对齐
 
-str.rpartition(sep)
-    类似于partition()
-    从结尾处开始
+    str.rpartition(sep)
+      类似于partition()
+      从结尾处开始
 
-str.rsplit(sep=None, maxsplit=- 1)
-    返回一个列表
-    从结尾处开始，拆分字符串，
-    maxsplit 为最大拆分次数
-    sep如果不指定，默认空白字符
+    str.rsplit(sep=None, maxsplit=- 1)
+      返回一个列表
+      从结尾处开始，拆分字符串，
+      maxsplit 为最大拆分次数
+      sep如果不指定，默认空白字符
 
-str.split(sep=None, maxsplit=- 1)
-    返回一个列表
-    连续的空字符视为单个分隔符
-    连续的分隔符被视为分隔空字符串
-    起始和结束处的分隔符视为头尾处存在空字符串
-    '|this|is|a|'.split('|') 得到
-       ['', 'this', 'is', 'a', '']
+    str.split(sep=None, maxsplit=- 1)
+      返回一个列表
+      连续的空字符视为单个分隔符
+      连续的分隔符被视为分隔空字符串
+      起始和结束处的分隔符视为头尾处存在空字符串
+      '|this|is|a|'.split('|') 得到
+         ['', 'this', 'is', 'a', '']
 
-str.splitlines(keepends=False)
-    拆分原字符串中的各行
-    不包含行边界
-    若keepends=True，则保留分行符
-    不同于 split()，当给出了分隔字符串 sep 时，
-      对于空字符串此方法将返回一个空列表，
-      而末尾的换行不会令结果中增加额外的行:
+    str.splitlines(keepends=False)
+      拆分原字符串中的各行
+      不包含行边界
+      若keepends=True，则保留分行符
+      不同于 split()，当给出了分隔字符串 sep 时，
+        对于空字符串此方法将返回一个空列表，
+        而末尾的换行不会令结果中增加额外的行:
 
-str.startswith(prefix[, start[, end]])
-    判断是否前缀
-    如果字符串以指定的 prefix 开始则返回 True，
-      否则返回 False。 
+    str.startswith(prefix[, start[, end]])
+      判断是否前缀
+      如果字符串以指定的 prefix 开始则返回 True，
+        否则返回 False。 
 
-str.strip([chars])
-    删除前后字符
-    返回原字符串的副本，移除其中的前导和末尾字符。
-    移除的方法是 chars 中的所有字符
+    str.strip([chars])
+      删除前后字符
+      返回原字符串的副本，移除其中的前导和末尾字符。
+      移除的方法是 chars 中的所有字符
 
-str.swapcase()
-    大小写转换
-    但s.swapcase().swapcase() == s
-    不一定总为真
+    str.swapcase()
+      大小写转换
+      但s.swapcase().swapcase() == s
+      不一定总为真
 
-str.title()
-    每个单词首字母大写
-    其余字母小写
-    但有时处理撇号会不正确
-    string.capwords() 函数没有此问题，因为它只用空格来拆分单词。
+    str.title()
+      每个单词首字母大写
+      其余字母小写
+      但有时处理撇号会不正确
+      string.capwords() 函数没有此问题，因为它只用空格来拆分单词。
 
-str.translate(table)
-    按映射表转换
-    可使用 str.maketrans()创建一个转换表
+    str.translate(table)
+      按映射表转换
+      可使用 str.maketrans()创建一个转换表
 
-str.upper()
-    转换为大写
-    返回原字符串的副本，其中所有区分大小写的字符 4 均转换为大写。 
+    str.upper()
+      转换为大写
+      返回原字符串的副本，其中所有区分大小写的字符 4 均转换为大写。 
 
-str.zfill(width)
-    在+/-后填充0，长度变为width
+    str.zfill(width)
+      在+/-后填充0，长度变为width
 
 '''
 import sys 
