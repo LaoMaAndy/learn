@@ -65,14 +65,15 @@ https://docs.python.org/zh-cn/3/library/exceptions.html#bltin-exceptions
             print(type(inst)) 
             ...
     raise 的唯一参数指示要引发的异常。
-      这必须是异常实例或异常类。如果传递异常类，
+    必须是异常实例或异常类。如果传递异常类，
       它将通过不带参数调用其构造函数来隐式实例化：
       # shorthand for 'raise ValueError()'
       raise ValueError  
     不带参数的raise, 将重新触发异常，用来判断
       是否引发异常，但不打算处理它
+
+# 异常链
     
-# 
 '''
 import sys
 
