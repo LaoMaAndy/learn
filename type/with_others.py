@@ -112,16 +112,102 @@ Type Objects 类型对象
 
 The Null Object 空对象
     如果函数没有显式返回值，则默认返回NoneType对象
-    空类型的单一实例，命名为None
-    使用 type(None)() 产生同一个单一实例
+    空类型的单实例，命名为None
+    使用 type(None)() 产生同一个单实例
     不支持任何特殊操作
 
 The Ellipsis Object 省略号对象
+    ... 占位符
+    用法: 
+      查看类型: type(...) 输出 <class 'ellipsis'>
+      函数中: def do_nothing(): ...
+      类型提示: numbers: tuple[int, ...]
+      在 numpy 中, 表示多维列表时， ... 有特殊用法
+    单例：
+      type(Ellipsis)() 会生成 Ellipsis 单实例
+
+The NotImplemented Object 未实现对象
+    单实例。写做： NotImplemented
+    当比较和二元运算被要求对它们不支持的类型进行操作时，会返回该对象。
     
-参考： 数据模型 / 标准类型层级结构
+Boolean Values 布尔值
+    布尔值是两个常量对象 False 和 True
+    置函数 bool() 可用于将任何值转换为布尔值，
+
+Internal Objects 内部对象
+    参阅 标准类型层级结构。The standard type hierarchy 
+    包含： 栈帧对象、回溯对象以及切片对象等等。
+
+# Special Attributes 特殊属性
+    语言实现为部分对象类型添加了一些特殊的只读属性，
+      它们具有各自的作用。 
+      其中一些并不会被 dir() 内置函数所列出。
+
+object.__dict__
+    一个字典或其他类型的映射对象，用于存储对象的（可写）属性。
+
+instance.__class__
+    类实例所属的类。
+
+class.__bases__
+    由类对象的基类所组成的元组。
+
+definition.__name__
+    类、函数、方法、描述器或生成器实例的名称。
+
+definition.__qualname__
+    类、函数、方法、描述器或生成器实例的 qualified name。
+
+class.__mro__
+    此属性是由类组成的元组，在方法解析期间会基于它来查找基类。
+
+class.mro()
+    此方法可被一个元类来重载，以为其实例定制方法解析顺序。
+      它会在类实例化时被调用，其结果存储于__mro__ 之中。
+
+class.__subclasses__()
+    每个类都存有对直接子类的弱引用列表。
+    本方法返回所有存活引用的列表。
+    列表的顺序按照子类定义的排列。
+
+# 参考： 数据模型 / 标准类型层级结构
       docs.python.org/zh-cn/3/reference/datamodel.html#types
 
+# 整数字符串转换长度限制
+    Integer string conversion length limitation
+    Exceeds the limit (4300 digits) 
+  使用 sys.set_int_max_str_digits() 设定最大转换位数
+  可配置的最低限制是 640 位:
+    sys.int_info.str_digits_check_threshold
+  需要 import sys
+  
+  受影响的 API
+    该限制仅适用于 int 和 str 或 bytes 之间可能较慢的转换：
+      int(string) 默认基数为 10。
+      int(string, base) 适用于所有不是 2 的幂的底数。
+      str(integer).
+      repr(integer).
+      任何其他字符串转换为基数 10，例如 
+        f"{integer}" 、 
+        "{}".format(integer) 或 
+        b"%d" % integer 
 
+  不受影响的API
+    int(string, base) with base 2, 4, 8, 16, or 32.
+    int.from_bytes() and int.to_bytes().
+    hex(), oct(), bin().
+    格式规格迷你语言 for hex, octal, and binary numbers.
+    str to float.
+    str to decimal.Decimal.
+
+  启动配置 3.11
+    可以使用环境变量或解释器命令行标志来配置限制：
+    PYTHONINTMAXSTRDIGITS, 若 = 0 则无长度限制
+    python3 -X int_max_str_digits=640
+    sys.flags.int_max_str_digits 设定：
+      sys.get_int_max_str_digits() 
+      sys.set_int_max_str_digits()
+    sys.int_info.default_max_str_digits 是编译时的默认限制
 
 '''
 def func_anno(x: int, y: int) -> int:
