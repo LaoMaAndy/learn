@@ -79,12 +79,23 @@ Python运算符
     x >> n 右移n位
     ~x     取反
 
+## 三元运算符 ternary operator
+    x if C else y
+    可以用于各种需要表达式的地方
+    首先计算 C , 如果为真，则计算x并返回
+    如果 C 为假，则计算并返回 y
+
 '''
 import math
 import sys
 sys.path.append('./public') 
 
 from print_exp import *
+
+def test_ternary():
+    s = int(input('Enter a number: '))
+    i = "less then 10" if s < 10 else "bigger than 10"
+    print(i)
 
 def opr_bool():
     ''' 布尔运算 '''
@@ -107,12 +118,13 @@ def opr_bool():
                 'math.ceil(3.2)', 'ceil: 向上取整',
                 'math.ceil(-3.2)', 'ceil: 向上取整',
                 ]
-    print_exp(exp_list)
+    print_exp(exp_list, [20, 10, 15, 20])
 
 
 if __name__ == '__main__':
     print(__doc__)
     def test():
         opr_bool()
+        # test_ternary()
         pass
     test()
