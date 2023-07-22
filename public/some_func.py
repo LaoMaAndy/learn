@@ -8,7 +8,15 @@ r'''打印表达式 / 值 / 值类型 / 备注信息
 '''
 import math
 import sys
+sys.path.append('./public') 
+sys.path.append('../public') 
+
 from keyword import iskeyword
+
+def prn_title(s, width=40, frm='_||‾'):
+    print(frm[0] * width)
+    print(frm[1] + s.center(width - 2) + frm[2])
+    print(frm[3] * width)
 
 def print_exp(exp, width=None, title=None):
     if width == None:
@@ -32,8 +40,7 @@ def print_exp(exp, width=None, title=None):
                          repr(v),
                          repr(type(v)),
                          exp[i + 1]))
-
-
+prn_express = print_exp
 def test_print_exp():
     exp_list = ['3 + 4 - 9 + 4*5', '整数运算结果类型为整数',
         '3.1 + 2 - 3.1' , '浮点数表达式结果为浮点数',

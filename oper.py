@@ -90,7 +90,7 @@ import math
 import sys
 sys.path.append('./public') 
 
-from print_exp import *
+from some_func import *
 
 def test_ternary():
     s = int(input('Enter a number: '))
