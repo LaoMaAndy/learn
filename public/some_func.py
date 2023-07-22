@@ -7,8 +7,8 @@ r'''打印表达式 / 值 / 值类型 / 备注信息
     -> print(格式串.format(*字段列表))
 '''
 import sys
-sys.path.append('./public') 
-sys.path.append('../public') 
+sys.path.append(['./public', '../public']) 
+from some_func import *
 
 import math
 from keyword import iskeyword
@@ -28,7 +28,6 @@ def prn_express(exp, width=None, title=None):
 
     fmt_list = ['{:' + str(x) + '}' for x in width]
     fmt = ' ' + ' '.join(fmt_list)
-    print('type(width[0]): ', type(width[0]))
     sep_list = ['|' + '-' * x for x in width]
     sep = ''.join(sep_list)
     print(sep)

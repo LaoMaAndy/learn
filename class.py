@@ -66,10 +66,9 @@ r'''
     类定义必须先执行才能生效
 '''
 import sys
-sys.path.append('./public') 
-sys.path.append('../public') 
+sys.path.append(['./public', '../public']) 
 from some_func import *
-
+ 
 def test_def_class():
     prn_title('test_def_class')
     class MyClass:
