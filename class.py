@@ -94,6 +94,7 @@ r'''
         作为右值，则会使用类公共变量
       若显式使用左值variable_name, 直接使用variable_name右值，
         则会引发异常
+    类中的实例变量、方法，可以先使用，后定义
 
 # 方法对象
     x.f() 将立即执行该方法
@@ -141,11 +142,13 @@ r'''
       搜索将转往基类中进行查找。 如果基类本身也派生自其他某个类，
       则此规则将被递归地应用。
     对C++程序员的提示：Python中所有的方法实际上都是virtual方法
-    直接调用基类方法：即调用 BaseClassName.methodname(self, arguments)
+    直接调用基类方法：即调用 BaseClassName.foo(self, arguments)
       >>注意，此处需要显示使用self
     内置函数 super()
-      super() 可用来引用父类而不必显式地指定它们的名称
-      class super(type, object_or_type=None)
+      super() 可用来引用父类而不必显式地指定它们的名称:
+        super().foo(arguments)
+        super().__init__(arguments)
+      super(type, object_or_type=None)
       返回一个代理对象，它会将方法调用委托给 type 的父类或兄弟类。
       super() 并不限于在方法内部使用。 
         两个参数的形式明确指定参数并进行相应的引用。 
