@@ -184,17 +184,187 @@ r'''
       非公有部分 (无论它是函数、方法或是数据成员)。 
       这应当被视为一个实现细节，可能不经通知即加以改变。
 
-# 名称改写
+# 名称改写 Name mangling 
+    用于在重载时不希望产生多态时使用，(c++语言 非virtual方法)
     任何形式为 __spam 的标识符（至少带有两个前缀下划线，至多一个后缀下划线）
     的文本将被替换为 _classname__spam，其中classname为去除了前缀下划线的当前类名称。
     名称改写有助于让子类重载方法而不破坏类内方法调用。
+    __update = update
+    这种方法确保在重载后，仍能调用原来的方法
+    注意：此规则在用于以下方法，情况有所不同：
+      exec() 或 eval() 
+      getattr() 、 setattr() 和 delattr() 以及直接引用 __dict__ 时。
 
-'''
+# 杂项：类似于c语言的struct
+    from dataclasses import dataclass
+    @dataclass
+    class Employee:
+        name: str
+        dept: str
+        salary: int
+    使用：
+    john = Employee('john', 'computer lab', 1000)
+    john.dept
+
+# 迭代器 Iterators
+    支持for语句
+    迭代器原理：
+        包含了__iter__()函数，该函数在执行iter(s)时自动调用
+        包含了__next__()函数，该函数在执行next(it)时自动调用
+            在__next__()中，当元素用尽时，应发出 StopIteration终止循环
+    迭代器使用：（交互方式）
+        s = 'abc'
+        it = iter(s)
+        it
+        next(it)
+        next(it)
+    迭代器定义：
+        class Reverse:
+        def __init__(self, data):
+            self.data = data
+            self.index = len(data)
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.index == 0:
+                raise StopIteration
+            self.index = self.index - 1
+            return self.data[self.index]
+    迭代器的4要素：
+        index / current, 
+        __iter__(self): return self
+        __next__(self)
+        raise StopIteration
+
+# 生成器 Generators
+    yield
+    生成器 是一个用于创建迭代器的简单而强大的工具。 
+    它们的写法类似于标准的函数，但当它们要返回数据时会使用 yield 语句。 
+      每次在生成器上调用 next() 时，它会从上次离开的位置恢复执行，
+      它会记住上次执行语句时的所有数据值。
+    生成器自动创建 __iter__() 和 __next__() 方法。
+    另一个关键特性在于局部变量和执行状态会在每次调用之间自动保存。
+    生成器编写：
+        def reverse(data):
+            for index in range(len(data)-1, -1, -1):
+                yield data[index]
+    生成器使用：
+        for char in reverse('golf'):
+            print(char)
+
+# 生成器表达式 Generator Expressions
+    类似于列表推导 list comprehensions，但使用的是圆括号()
+    用于sum(), set(), max()等类似函数
+    一些简单的生成器可以使用类似于列表推导式的语法简洁地编码为表达式，
+      但使用括号而不是方括号。这些表达式是为封闭函数立即使用生成器的情况而设计的。
+      生成器表达式比完整的生成器定义更紧凑，但通用性较差，
+      并且比等效的列表推导式更易于内存使用。
+      
+# 生成器表达式举例：
+    sum(i*i for i in range(10))                 # sum of squares
+
+    xvec = [10, 20, 30]
+    yvec = [7, 5, 3]
+    sum(x*y for x,y in zip(xvec, yvec))         # dot product
+
+    unique_words = set(word for line in page  for word in line.split())
+
+    valedictorian = max((student.gpa, student.name) for student in graduates)
+
+    data = 'golf'
+    list(data[i] for i in range(len(data)-1, -1, -1))
+
+ '''
+
 # 以下内容是使用public文件夹中的一些自定义类
 import sys
 sys.path.append('./public')
 sys.path.append('../public')
 from some_func import *
+
+class MyRange():
+    '''自制的range()类
+    基本功能与range()相同
+    '''
+    def __init__(self, *arg):
+        self.start = self.end = 0
+        self.step = 1
+        s = len(arg)
+        if s == 1:
+            self.end = arg[0]
+        elif s == 2:
+            self.start = arg[0]
+            self.end = arg[1]
+        elif s == 3:
+            self.start = arg[0]
+            self.end = arg[1]
+            self.step = arg[2]
+        else:
+            raise TypeError('range expected at most 3 arguments')
+        if self.step == 0:
+            raise ValueError('step cannt be 0')
+        self.current = self.start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.step > 0 and self.current < self.end:
+            self.current += self.step
+            return self.current - self.step
+        if self.step < 0 and self.current > self.end:
+            self.current += self.step
+            return self.current - self.step
+        raise StopIteration
+
+def test_myrange():
+    prn_title('test_myrange()')
+    print(list(MyRange(10)))
+    print(list(MyRange(2, 5)))
+    print(list(MyRange(0, 10, 2)))
+    #print(list(MyRange(0, 10, 1, 4)))
+    #print(list(MyRange(0, 10, 0)))
+    print(list(MyRange(10, 9, -2)))
+
+
+class Mapping:
+    '''名称改写
+    以确保在方法被重载后，仍然保证调用基类的方法
+    '''
+    def __init__(self, iterable):
+        self.items_list = []
+        # 使用名称改写的标识符
+        self.__update(iterable)
+        # 如果不使用名称改写，则由于该方法在继承类中被改写，
+        # 而导致错误
+        #self.update(iterable)
+
+    def update(self, iterable):
+        for item in iterable:
+            self.items_list.append(item)
+
+    # 定义一个别名。方便两种使用
+    __update = update   # private copy of original update() method
+
+class MappingSubclass(Mapping):
+
+    def update(self, keys, values):
+        # provides new signature for update()
+        # but does not break __init__()
+        for item in zip(keys, values):
+            self.items_list.append(item)
+
+def test_name_mangling():
+    prn_title('test_name_mangling()')
+    m = Mapping(range(10))
+    print(m.items_list)
+    char = list('abcdefg')
+    value = list(range(97, 104))
+    s = MappingSubclass(range(3))
+    s.update(char, value)
+    print(s.items_list)
 
 
 class OverRide():
@@ -383,4 +553,6 @@ if __name__ == '__main__':
         test_derived()
         test_ClassVariable()
         test_override()
+        test_name_mangling()
+        test_myrange()
     test()
