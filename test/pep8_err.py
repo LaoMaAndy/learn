@@ -3,6 +3,7 @@ This is doc string
 '''
 from math import *
 
+
 def func():
     n = 5
     for i in range(n):

@@ -166,14 +166,32 @@ r'''
 # 多重继承
     class DerivedClassName(Base1, Base2, Base3):
     搜索顺序简单讲：深度优先、从左至右
-    
+    菱形关联：即至少有一个父类可通过多条路径被最底层类所访问
+      例如：所有类都是继承自 object，因此任何多重继承的情况都提供了
+      一条以上的路径可以通向 object
+    为了确保基类不会被访问一次以上，动态算法会用一种特殊方式将搜索顺序线性化， 
+      保留每个类所指定的从左至右的顺序，只调用每个父类一次，并且保持单调，即，
+      一个类可以被子类化而不影响其父类的优先顺序
+    参阅：
+      www.python.org/download/releases/2.3/mro/
 
+# 私有变量
+    那种仅限从一个对象内部访问的“私有”实例变量在 Python 中并不存在。
+    遵循这样一个约定：带有一个下划线的名称 (例如 _spam) 应该被当作是 API 的
+      非公有部分 (无论它是函数、方法或是数据成员)。 
+      这应当被视为一个实现细节，可能不经通知即加以改变。
+
+# 名称改写
+    任何形式为 __spam 的标识符（至少带有两个前缀下划线，至多一个后缀下划线）
+    的文本将被替换为 _classname__spam，其中classname为去除了前缀下划线的当前类名称。
+    名称改写有助于让子类重载方法而不破坏类内方法调用。
 
 '''
-from some_func import *
+# 以下内容是使用public文件夹中的一些自定义类
 import sys
 sys.path.append('./public')
 sys.path.append('../public')
+from some_func import *
 
 
 class OverRide():
@@ -194,8 +212,7 @@ class OverRide():
     def prn_after(self):
         pass
 
-
-class DrvdClass(OverRide):
+class SubClass(OverRide):
     def __init__(self, s=''):
         super().__init__(s)
     # 派生类重载了基类的同名函数
@@ -206,7 +223,6 @@ class DrvdClass(OverRide):
     def prn_after(self):
         print('-' * 10, end='')
 
-
 def test_override():
     prn_title('test_override()')
 
@@ -214,9 +230,8 @@ def test_override():
     b = OverRide('Base Class')
     b.prn()
     # 派生类实例对象，调用prn()时，使用派生类重载后的方法
-    d = DrvdClass('This is a Derived class')
+    d = SubClass('This is a Derived class')
     d.prn()
-
 
 class ClassVariable():
     # 类中变量的形式有3：
@@ -292,14 +307,12 @@ class DerivedClass(BaseClass):
         print('DerivedClas __init__: ', s)
         super().__init__(s)
 
-
 def test_derived():
     prn_title('test_derived()')
     b = BaseClass('None')
     b.prn()
     d = DerivedClass('This is derived class')
     b.prn()
-
 
 class MyClass():
     r'''
@@ -315,7 +328,6 @@ class MyClass():
     def set_str(self, s):
         MyClass.class_str = s
         print('Set a new class_str: ', s)
-
 
 def test_myclass():
     prn_title('test_myclass')
@@ -352,13 +364,11 @@ def test_myclass():
     print('b.class_str:', b.class_str)
     print('a.__class__:', a.__class__)
 
-
 def test_def_class():
     prn_title('test_def_class')
 
     class MyClass:
         print('this is MyClass')
-
 
 if __name__ == '__main__':
     print(__doc__)
