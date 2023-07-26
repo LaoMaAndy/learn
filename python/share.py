@@ -14,8 +14,34 @@ r'''打印表达式 / 值 / 值类型 / 备注信息
 import math
 from keyword import iskeyword
 
+def prn_list(list_item, row = 4, width = 20):
+    try:
+        for i in range(0, len(list_item), row):
+            for j in range(row):
+                #print(f'{s:{w}}'.format(s=list_item[i+j], w=width), end='')
+                print(f'{list_item[i+j]:{width}}', end='')
+            print()
+    except IndexError:
+        return
+    finally:
+        print()
+
+def test_prn_list():
+    prn_title('test_prn_list()')
+    t = dir(int)
+    prn_list(t)
+    prn_list(t, 3)
+    prn_list(['aaa','bbb','ccc'])
+    prn_list('uvwxyz')
+
 def prn_title(s, width=40, frame=''):
-    
+    '''打印标题
+    在标题外侧添加边框，并居中打印标题
+        width: 整数。标题宽度，默认40字符
+        frame: 字符串。标题边框
+    frame字符串长度可以为1，2，3，或更长
+        默认打印边框：'_||‾'
+    '''    
     l = len(frame)
     if l == 0:
         frame = '_||‾'
@@ -43,6 +69,14 @@ def test_prn_title():
     prn_title("test_prn_title()", 10, frame='*|-')
 
 def prn_express(exp, width=None, title=None):
+    '''打印表达式
+    格式：表达式，结果，结果类型，注释信息
+    参数：
+        exp: 列表。表达式列表，格式为:['表达式', '注释信息',...]
+        width: 宽度。列表。包含4个宽度值
+        title: 标题。列表。包含4个标题字符串
+
+    '''
     if width == None:
         width=[20, 15, 20, 20]
     if title == None:
@@ -90,4 +124,5 @@ if __name__ == '__main__':
     def test():
         test_print_exp()
         test_prn_title()
+        test_prn_list()
     test()
