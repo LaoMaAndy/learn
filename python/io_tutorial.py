@@ -53,8 +53,97 @@ r'''
         'Ma: {Ma:d}; joe:{joe:d}; Tony: {Tony:d}'.format(**table)
 
 # 手动格式化字符串
-    使用str.rjust(), str.ljust(), str.center() 进行手动格式化
-    如果需要截断字符串，可以使用x.ljust(n)[:n]
+    右对齐：str.rjust()
+    左对齐：str.ljust()
+    中对齐：str.center() 
+    截断字符串，可以使用x[:n].ljust(n)
+    数字字符串填充零：str.zfill()
+
+# printf风格 格式化字符串
+    'string' % values
+    'pi is %5.3f.' % math.pi
+    '%1.1s-%2.2s-%3.3s' % ('aaa', 'bbb', 'cccc') 
+        >>> 'a-bb-ccc'
+# 读写文件
+    open() 返回一个 file object
+    open(filename, mode, encoding=None)
+    例如：
+        f = open('workfile', 'w', encoding="utf-8")
+    mode 包括：
+        'r' ，表示文件只能读取；
+        'w' 表示只能写入（现有同名文件会被覆盖）；
+        'a' 表示打开文件并追加内容，任何写入的数据会自动添加到文件末尾。
+        'r+' 表示打开文件进行读写。
+        mode 实参是可选的，省略时的默认值为 'r'。
+        二进制：模式后面加上一个 'b'
+            二进制模式的数据是以 bytes 对象的形式读写的。
+            在二进制模式下打开文件时，你不能指定 encoding 。
+            读写 JPEG 或 EXE时，一定要使用二进制模式。
+    换行符转换：
+        文本模式下读取文件时，默认把平台特定的行结束符
+        （Unix 上为 \n, Windows 上为 \r\n）转换为 \n。
+        在文本模式下写入数据时，默认把 \n 转换回平台特定结束符。
+    使用 with 关键字。
+        优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。
+        而且，使用 with 相比等效的 try-finally 代码块要简短得多
+    检查文件是否已经关闭：
+        f.closed 为 True 
+    如果没有使用 with 关键字，则应调用 f.close() 关闭文件
+
+# 文件对象的方法
+    f.read(size)
+        读取文件。size为空时或为负，读取全部文件，返回字符串 / 字节串
+        文件大小是内存的两倍时，会出现问题
+        如已到达文件末尾，f.read() 返回空字符串（''）
+    f.readline()
+        返回字符串
+        从文件中读取单行数据；字符串末尾保留换行符（\n)
+        文件不以换行符结尾时，文件的最后一行才会省略换行符。
+        readline() 返回空字符串，就表示已经到达了文件末尾，
+        空行使用 '\n' 表示，该字符串只包含一个换行符。
+    f.readlines()
+        返回列表。列表中的每一个元素是字符串，为文件每一行。
+    使用迭代，读取文件内容：
+        for line in f: ....
+    将文件内容抓换为列表：
+        t = list(f)
+    f.write(s)
+        写入内容，返回写入的字符数
+        s 必须是字符串（文本模式）或 字节串（二进制模式）
+    f.tell() 
+        返回整数，给出文件对象在文件中的当前位置，
+        表示为二进制模式下时从文件开始的字节数，\
+        以及文本模式下的意义不明的数字。
+    f.seek(offset, whence) 
+        改变文件对象的位置。
+        offset：偏移
+        whence 值为:
+            0 时，表示从文件开头计算，
+            1 表示使用当前文件位置，
+            2 表示使用文件末尾作为参考点。
+            省略 whence 时，其默认值为 0，即使用文件开头作为参考点。
+        文本文件的定位：
+            只允许相对于文件开头进行查找 f.seek(n, 0)
+            例外: seek(0, 2) 查找文件末尾
+        offset:
+            只能设定为f.tell()返回的偏移值，或者零
+            任何其他偏移值都会产生未定义的行为。
+    文件对象还支持 isatty() 和 truncate() 等方法。但不常用。
+
+# 使用 json 保存结构化数据
+    现代应用程序通常使用 JSON 格式来进行数据交换。
+    许多程序员已经熟悉它，这使其成为互操作性的不错选择。
+        import json
+        x = [1, 'simple', 'list']
+        json.dumps(x)
+    如果 f 是 text file 对象，可以这样做：
+        json.dump(x, f)
+    如果 f 是已打开、供读取的 binary file 或 text file 对象：
+        x = json.load(f)
+    备注 JSON文件必须以UTF-8编码。
+        当打开JSON文件作为一个 text file 用于读写时，
+        使用 encoding="utf-8" 。
+
 '''
 from share import prn_title
 

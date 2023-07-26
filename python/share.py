@@ -96,12 +96,17 @@ def prn_express(exp, width=None, title=None):
         print('exp: ["express", "comment", ...]')
         return
 
-    sep_line =  '-' * (width[0]-1) + '|' + \
-                '-' * (width[1]-1) + '|' + \
-                '-' * (width[2]-1) + '|' + \
-                '-' * (width[3]) 
-    title_line = '{t[0]:^{w[0]}}{t[1]:^{w[1]}}{t[2]:^{w[2]}}'\
-                 '{t[3]:^{w[3]}}'.format(t=title, w=width)
+    w = width
+    t = title
+    sep_line =  '-' * (w[0]-1) + '|' + \
+                '-' * (w[1]-1) + '|' + \
+                '-' * (w[2]-1) + '|' + \
+                '-' * (w[3]) 
+    title_line = t[0].center(w[0]) + t[1].center(w[1]) + \
+                 t[2].center(w[2]) + t[3].center(w[3])
+
+    # title_line = '{t[0]:^{w[0]}}{t[1]:^{w[1]}}{t[2]:^{w[2]}}'\
+    #             '{t[3]:^{w[3]}}'.format(t=title, w=width)
     print(sep_line)
     print(title_line)
     print(sep_line)
@@ -117,7 +122,9 @@ def prn_express(exp, width=None, title=None):
             result_type = '---'
         # 每行有四个部分，分别生成格式字符串
         w = width[0] - 1
+        # 此处使用 字符串对齐函数，使用切片做裁切
         part_1 = ' ' + exp[i][:w].ljust(w)
+        # 以下使用str.format() 两种方法比较，字符串对齐函数更清晰直接
         #part_1 = ' {a:{b}.{b}}'.format(a=exp[i], b=width[0]-1)
 
         if result_type == type(float()):
@@ -135,7 +142,8 @@ def prn_express(exp, width=None, title=None):
             print(part_1, part_2, part_3, exp[i+1], sep = '')
         except IndexError:
             return
-    # 以下实现使用 'str'.format()
+    # 以下使用 列表推导 和 'str'.format()
+    # 不够清晰也未处理 浮点数
     """
     fmt_list = ['{:' + str(x) + '}' for x in width]
     fmt = ' ' + ' '.join(fmt_list)

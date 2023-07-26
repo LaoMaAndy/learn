@@ -1,7 +1,9 @@
-定位到文件开头，写入。。。@#$%^&*()
+1234567890
+abcdefghijklmnopqrstuvwxyz
+!@#$%^&*()
 以下是中文信息
 大写：
 一二三四五六七八九十
 some test information
 and &fejkwl;483296
-!@#$%^&*()_定位到文件末尾，使用write写入
+!@#$%^&*()_
