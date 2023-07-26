@@ -232,8 +232,10 @@ is系列方法
 
 '''
 import sys 
+'''
 sys.path.append('../public') 
-from print_exp import print_exp
+'''
+from share import print_exp
 from keyword import iskeyword
 
 def test_is():
@@ -263,7 +265,7 @@ def test_is():
             "' '","",
             "' '","",
           ]
-    print_exp(exp, [35, 25, 15, 20])
+    print_exp(exp, [35, 30, 18, 20])
 
 def test_format_map():
     print('test_format_map()'.center(40, '*'))

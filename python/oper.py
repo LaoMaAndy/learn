@@ -88,9 +88,9 @@ Python运算符
 '''
 import math
 import sys
-sys.path.append('./public') 
+# sys.path.append('./public') 
 
-from some_func import *
+from share import print_exp
 
 def test_ternary():
     s = int(input('Enter a number: '))
@@ -118,7 +118,7 @@ def opr_bool():
                 'math.ceil(3.2)', 'ceil: 向上取整',
                 'math.ceil(-3.2)', 'ceil: 向上取整',
                 ]
-    print_exp(exp_list, [20, 10, 15, 20])
+    print_exp(exp_list, [20, 10, 20, 20])
 
 
 if __name__ == '__main__':
