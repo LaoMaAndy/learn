@@ -7,7 +7,57 @@ r'''
   3、class string.Template(template) 类
   4、printf风格的 %字符串 和 % 操作符
 
+# f字符串 f' '
+====================
+词法规则：
+  f_string          ::=  (literal_char | "{{" | "}}" | replacement_field)*
+  replacement_field ::=  "{" f_expression ["="] ["!" conversion] [":" format_spec] "}"
+  f_expression      ::=  (conditional_expression | "*" or_expr)
+                           ("," conditional_expression | "," "*" or_expr)* [","]
+                         | yield_expression
+  conversion        ::=  "s" | "r" | "a"
+  format_spec       ::=  (literal_char | NULL | replacement_field)*
+  literal_char      ::=  <any code point except "{", "}" or NULL>
+
+其中：
+  双花括号 '{{' 或 '}}' 被替换为单花括号
+  转换符   
+    '!s' 调用 str() 转换求值结果，
+    '!r' 调用 repr()，
+    '!a' 调用 ascii()。
+  = 说明符：将字符串扩展为 "表达式文本=表达式值" 的样式
+  : 冒号后面是 format specifiers，
+      调用传入表达式或转换结果的 __format__() 方法
+      format(value, format_spec) 
+      format specifier mini-language
+# f字符串举例
+  name = "Fred"
+  f"He said his name is {name!r}."
+  f"He said his name is {repr(name)}."  # repr() is equivalent to !r
+
+  width = 10
+  precision = 4
+  value = decimal.Decimal("12.34567")
+  f"result: {value:{width}.{precision}}"  # nested fields
+
+  today = datetime(year=2017, month=1, day=27)
+  f"{today:%B %d, %Y}"  # using date format specifier
+
+  f"{today=:%B %d, %Y}" # using date format specifier and debugging
+
+  number = 1024
+  f"{number:#0x}"  # using integer format specifier
+
+  foo = "bar"
+  f"{ foo = }" # preserves whitespace
+
+  line = "The mill's closed"
+  f"{line = }"
+  f"{line = :20}"
+  f"{line = !r:20}"
+
 # str.format() 方法
+====================
 格式字符串
     不在花括号之内的内容被视为字面文本
     花括号 {} 括起来的“替换字段”
@@ -40,6 +90,7 @@ r'''
   "More {!a}"                      # Calls ascii() on the argument first
 
 # 格式规格迷你语言
+===============
   “格式规格”在格式字符串所包含的替换字段内部使用，
   用于定义单个值应如何呈现
    (参见 格式字符串语法 和 格式字符串字面值)。
@@ -188,55 +239,8 @@ r'''
         print('{0:{width}{base}}'.format(num, base=base, width=width), end=' ')
       print()
 
-# f字符串 f' '
-词法规则：
-  f_string          ::=  (literal_char | "{{" | "}}" | replacement_field)*
-  replacement_field ::=  "{" f_expression ["="] ["!" conversion] [":" format_spec] "}"
-  f_expression      ::=  (conditional_expression | "*" or_expr)
-                           ("," conditional_expression | "," "*" or_expr)* [","]
-                         | yield_expression
-  conversion        ::=  "s" | "r" | "a"
-  format_spec       ::=  (literal_char | NULL | replacement_field)*
-  literal_char      ::=  <any code point except "{", "}" or NULL>
-
-其中：
-  双花括号 '{{' 或 '}}' 被替换为单花括号
-  转换符   
-    '!s' 调用 str() 转换求值结果，
-    '!r' 调用 repr()，
-    '!a' 调用 ascii()。
-  : 冒号后面是 format specifiers，
-      调用传入表达式或转换结果的 __format__() 方法
-      format(value, format_spec) 
-      format specifier mini-language
-
-# f字符串举例
-  name = "Fred"
-  f"He said his name is {name!r}."
-  f"He said his name is {repr(name)}."  # repr() is equivalent to !r
-
-  width = 10
-  precision = 4
-  value = decimal.Decimal("12.34567")
-  f"result: {value:{width}.{precision}}"  # nested fields
-
-  today = datetime(year=2017, month=1, day=27)
-  f"{today:%B %d, %Y}"  # using date format specifier
-
-  f"{today=:%B %d, %Y}" # using date format specifier and debugging
-
-  number = 1024
-  f"{number:#0x}"  # using integer format specifier
-
-  foo = "bar"
-  f"{ foo = }" # preserves whitespace
-
-  line = "The mill's closed"
-  f"{line = }"
-  f"{line = :20}"
-  f"{line = !r:20}"
-
 # Template 模版字符串
+====================
 使用方法：
   导入库：
     from string import Template
@@ -251,6 +255,7 @@ r'''
   或用于解析模板字符串的整个正则表达式。
 
 # print风格字符串
+====================
 基本格式
   format % values 
   其中 format 为一个字符串，
