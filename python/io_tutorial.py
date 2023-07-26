@@ -51,7 +51,10 @@ r'''
     也可以通过使用 ** 表示法将 table 字典作为关键字参数传递来完成。
         table = {'joe': 4127, 'Ma': 4098, 'Tony': 8637678}
         'Ma: {Ma:d}; joe:{joe:d}; Tony: {Tony:d}'.format(**table)
-    
+
+# 手动格式化字符串
+    使用str.rjust(), str.ljust(), str.center() 进行手动格式化
+    如果需要截断字符串，可以使用x.ljust(n)[:n]
 '''
 from share import prn_title
 

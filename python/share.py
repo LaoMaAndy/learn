@@ -116,13 +116,20 @@ def prn_express(exp, width=None, title=None):
             result = 'Error'
             result_type = '---'
         # 每行有四个部分，分别生成格式字符串
-        part_1 = ' {a:{b}.{b}}'.format(a=exp[i], b=width[0]-1)
+        w = width[0] - 1
+        part_1 = ' ' + exp[i][:w].ljust(w)
+        #part_1 = ' {a:{b}.{b}}'.format(a=exp[i], b=width[0]-1)
+
         if result_type == type(float()):
             # 对于浮点数，单独设定格式
             part_2 = '{a:>{b}.3f}'.format(a=result, b=width[1]-1)    
         else:
-            part_2 = '{a:>{b}.{b}}'.format(a=repr(result), b=width[1]-1)
-        part_3 = '{a:^{b}.{b}}'.format(a=repr(result_type), b=width[2]+1)
+            w = width[1] - 1
+            part_2 = repr(result)[:w].rjust(w)
+            #part_2 = '{a:>{b}.{b}}'.format(a=repr(result), b=width[1]-1)
+        w = width[2] + 1
+        part_3 = repr(result_type)[:w].center(w)
+        #part_3 = '{a:^{b}.{b}}'.format(a=repr(result_type), b=width[2]+1)
         try:
             # 打印。如果没有最后的注释项，exp[i+1]会引发异常。
             print(part_1, part_2, part_3, exp[i+1], sep = '')
