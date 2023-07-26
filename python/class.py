@@ -1,40 +1,41 @@
 #!/usr/bin/env python3
 r'''
 # 类相关概念：
-    Object Oriented Programming
     面向对象编程
-    type, instance, attribute, method
+        Object Oriented Programming
     类型，实例，属性，方法
-    inheritance, base classes, derived class, override
+        type, instance, attribute, method
     继承，基类，派生类，重载
-    created at runtime, modified after creation
+        inheritance, base classes, derived class, override
     运行时创建，创建后可以修改
-    member, public, private, virtual
+        created at runtime, modified after creation
     成员， 公共， 私有， 虚拟
-    An explicit first argument representing the object
+        member, public, private, virtual
     方法的第一个参数显式声明对象本身
-    provided implicitly by the call
+        An explicit first argument representing the object
     调用方法时隐式提供
-    classes themselves are objects
+        provided implicitly by the call
     类本身就是对象
-    built-in types can be used as base classes by user
+        classes themselves are objects
     用户可以使用内置的作为基类进行扩展
-    built-in operators can be redefined
+        built-in types can be used as base classes by user
     内置运算符可以被重定义
-    module, attribute
+        built-in operators can be redefined
     模块，属性
-    Namespaces have different lifetimes
+        module, attribute
     命名空间有不同的声明周期
-    scope
+        Namespaces have different lifetimes
     作用域
-    Class Object, Instance Object, function object, Method Object
+        scope
     类对象、实例对象、函数对象、方法对象
-    Class Variable、Instance Variable
+        Class Object, Instance Object, function object, Method Object
     类变量、实例变量
+        Class Variable、Instance Variable
 
 # 对象和名称：一个对象可以绑定多个名称
 
 # 作用域和命名空间: Scopes and Namespaces
+
 # 命名空间 namespace: 从名称到对象的映射
     大多数使用字典实现
     不同的模块可以都定义同名函数而不会混淆
@@ -51,6 +52,7 @@ r'''
       函数的本地命名空间在调用该函数时创建，
         并在函数返回或抛出不在函数内部处理的错误时被删除。
         每次递归调用都会有自己的本地命名空间。
+
 # 作用域 scope
     搜索顺序
       当前局部作用域将包含本地名称。
@@ -261,7 +263,7 @@ r'''
       但使用括号而不是方括号。这些表达式是为封闭函数立即使用生成器的情况而设计的。
       生成器表达式比完整的生成器定义更紧凑，但通用性较差，
       并且比等效的列表推导式更易于内存使用。
-      
+
 # 生成器表达式举例：
     sum(i*i for i in range(10))                 # sum of squares
 
@@ -285,7 +287,7 @@ sys.path.append('../public')
 from some_func import *
 
 class MyRange():
-    '''自制的range()类
+    '''自制的range()类:
     基本功能与range()相同
     '''
     def __init__(self, *arg):
