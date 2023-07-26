@@ -51,8 +51,8 @@ r'''
 
 import sys
 
-from share import prn_title, prn_list
 from pprint import pprint
+from share import prn_title, prn_list
 
 def test_import():
     print('test_import()')

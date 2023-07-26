@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-r'''打印表达式 / 值 / 值类型 / 备注信息
-    此处：
-    字段列表、宽度值 
-    -> 使用‘推导’，生成格式化，列表
-    -> 将列表join格式化字符串
-    -> print(格式串.format(*字段列表))
+r'''自己编写的一些公用函数
+
 '''
 
 #import sys
@@ -15,10 +11,15 @@ import math
 from keyword import iskeyword
 
 def prn_list(list_item, row = 4, width = 20):
+    '''打印列表，分多个栏
+    默认打印4栏，每栏宽度默认20
+    '''
     try:
         for i in range(0, len(list_item), row):
             for j in range(row):
+                # 实现方法使用 'string'.format()。不用。
                 #print(f'{s:{w}}'.format(s=list_item[i+j], w=width), end='')
+                # 使用f'...' 效果更佳
                 print(f'{list_item[i+j]:{width}}', end='')
             print()
     except IndexError:
@@ -39,9 +40,9 @@ def prn_title(s, width=40, frame=''):
     在标题外侧添加边框，并居中打印标题
         width: 整数。标题宽度，默认40字符
         frame: 字符串。标题边框
-    frame字符串长度可以为1，2，3，或更长
+    frame边框字符串长度可以为1，2，3，4
         默认打印边框：'_||‾'
-    '''    
+    '''
     l = len(frame)
     if l == 0:
         frame = '_||‾'
@@ -65,25 +66,30 @@ def prn_title(s, width=40, frame=''):
 
 def test_prn_title():
     prn_title("test_prn_title()")
+    prn_title("test_prn_title()", frame = '*')
+    prn_title("test_prn_title()", 40, '=|')
     prn_title("test_prn_title()", frame='*|-')
     prn_title("test_prn_title()", 10, frame='*|-')
 
 def prn_express(exp, width=None, title=None):
-    '''打印表达式
-    格式：表达式，结果，结果类型，注释信息
+    '''打印：表达式，表达式结果，结果类型，备注信息
+    默认打印 4 栏，
+        栏标题默认为：'express', 'result', 'result type', 'comment'
     参数：
-        exp: 列表。表达式列表，格式为:['表达式', '注释信息',...]
+        exp: 列表。列表单数项目为表达式，偶数项目为注释信息。
+            项目类型都为字符串。表达式将使用 eval() 求值。
         width: 宽度。列表。包含4个宽度值
         title: 标题。列表。包含4个标题字符串
 
     '''
-    if width == None:
-        width=[20, 15, 20, 20]
-    if title == None:
-        title = ['express', 'result', 'result type', 'comment']
-    #if exp == None:
-    #    exp = []
-
+    if width == None: width=[20, 15, 20, 20]
+    if title == None: title = ['express', 'result', 'result type', 'comment']
+    if len(exp) < 1:
+        print('exp: ["express", "comment", ...]')
+        return
+    
+    # 以下实现使用 'str'.format()
+    # 显得比较复杂和笨拙。不过结果是正确的，暂时不修改了
     fmt_list = ['{:' + str(x) + '}' for x in width]
     fmt = ' ' + ' '.join(fmt_list)
     sep_list = ['|' + '-' * x for x in width]
@@ -92,11 +98,17 @@ def prn_express(exp, width=None, title=None):
     print(fmt.format(*title))
     print(sep)
     for i in range(0, len(exp), 2):
-        v = eval(exp[i])
-        print(fmt.format(exp[i], 
-                         repr(v),
-                         repr(type(v)),
-                         exp[i + 1]))
+        try:
+            result = eval(exp[i])
+            result_type = type(result)
+        except (NameError, SyntaxError, TypeError, ValueError):
+            result = 'Error'
+            result_type = '---'
+        try:
+            print(fmt.format(exp[i], repr(result), repr(result_type), exp[i+1]))
+        except IndexError:
+            return
+
 # make an alias
 print_exp = prn_express
 
@@ -116,6 +128,7 @@ def test_print_exp():
         '"abcdef"[::]' , '字符串切片',
         '"abcdef"[-12:21]' , '起始和终止位置任意',
         '"abcdef"[21:-42]' , '起始和终止位置任意',
+        'fdsaewaf+fdjew432', '错误表达式',
     ]
     print_exp(exp_list)
 
