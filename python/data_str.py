@@ -249,7 +249,7 @@ def test_is():
            'iskeyword("def")', '是否有效的关键字',
            '"1290".isnumeric()','是否数值字符',
            '"   ".isprintable()','空白字符串为True',
-           '"  \t".isspace()','是否空白字串',
+           '"\t ".isspace()','是否空白字串',
            '"".isspace()','空字符串为False',
            '"-".join(["1", "2", "3"])','拼接字符串',
             "' spacious '.lstrip()","移除左侧空白",

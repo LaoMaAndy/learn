@@ -100,8 +100,8 @@ def prn_express(exp, width=None, title=None):
                 '-' * (width[1]-1) + '|' + \
                 '-' * (width[2]-1) + '|' + \
                 '-' * (width[3]) 
-    title_line = '{a[0]:^{w[0]}}{a[1]:^{w[1]}}{a[2]:^{w[2]}}'\
-                 '{a[3]:^{w[3]}}'.format(a=title, w=width)
+    title_line = '{t[0]:^{w[0]}}{t[1]:^{w[1]}}{t[2]:^{w[2]}}'\
+                 '{t[3]:^{w[3]}}'.format(t=title, w=width)
     print(sep_line)
     print(title_line)
     print(sep_line)
