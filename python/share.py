@@ -10,12 +10,17 @@ r'''自己编写的一些公用函数
 import math
 from keyword import iskeyword
 
-def prn_list(list_item, row = 4, width = 20):
+def prn_list(list_item, row = 4, width = 0):
     '''打印列表，分多个栏
     默认打印4栏，每栏宽度默认20
     '''
+    if width == 0:
+        width = int(80 // row)
     try:
         for i in range(0, len(list_item), row):
+            # 每行先打印两个空格
+            print('  ', end='')
+            # 此处有可能超出 列表 索引范围，做异常处理
             for j in range(row):
                 # 实现方法使用 'string'.format()。不用。
                 #print(f'{s:{w}}'.format(s=list_item[i+j], w=width), end='')
@@ -98,6 +103,7 @@ def prn_express(exp, width=None, title=None):
     print(fmt.format(*title))
     print(sep)
     for i in range(0, len(exp), 2):
+        # 表达式：可以为错误的表达式。如果表达式错误，设定一个默认值
         try:
             result = eval(exp[i])
             result_type = type(result)
@@ -106,6 +112,7 @@ def prn_express(exp, width=None, title=None):
             result_type = '---'
         try:
             print(fmt.format(exp[i], repr(result), repr(result_type), exp[i+1]))
+        # 如果没有最后的注释项，则会引发异常。
         except IndexError:
             return
 
