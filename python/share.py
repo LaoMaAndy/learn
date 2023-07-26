@@ -6,17 +6,41 @@ r'''打印表达式 / 值 / 值类型 / 备注信息
     -> 将列表join格式化字符串
     -> print(格式串.format(*字段列表))
 '''
-import sys
-sys.path.append(['./public', '../public']) 
-from some_func import *
+
+#import sys
+#sys.path.append('./public')
+#sys.path.append('../public') 
 
 import math
 from keyword import iskeyword
 
-def prn_title(s, width=40, frm='_||‾'):
-    print(frm[0] * width)
-    print(frm[1] + s.center(width - 2) + frm[2])
-    print(frm[3] * width)
+def prn_title(s, width=40, frame=''):
+    
+    l = len(frame)
+    if l == 0:
+        frame = '_||‾'
+    top = 0
+    if l == 1:
+        left = right = bottom = 0
+    elif l == 2:
+        left = right = 1
+        bottom = 0
+    elif l == 3:
+        left = 1
+        right = 2
+        bottom = 0
+    else:
+        left = 1
+        right = 2
+        bottom = 3
+    print(frame[top] * width)
+    print(frame[left] + s.center(width - 2) + frame[right])
+    print(frame[bottom] * width)
+
+def test_prn_title():
+    prn_title("test_prn_title()")
+    prn_title("test_prn_title()", frame='*|-')
+    prn_title("test_prn_title()", 10, frame='*|-')
 
 def prn_express(exp, width=None, title=None):
     if width == None:
@@ -65,4 +89,5 @@ if __name__ == '__main__':
     print(__doc__)
     def test():
         test_print_exp()
+        test_prn_title()
     test()
