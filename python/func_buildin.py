@@ -452,16 +452,41 @@ open(file, mode='r', buffering=- 1, encoding=None, errors=None,
             在写入二进制和追加二进制模式下，它将返回 io.BufferedWriter，
             而在读/写模式下，它将返回 io.BufferedRandom。 
             当禁用缓冲时，则会返回原始流，即 io.RawIOBase 的一个子类 io.FileIO。
+
 ord(c)
     对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数。
         例如 ord('a') 返回整数 97， ord('€') （欧元符号）返回 8364 。
         这是 chr() 的逆函数。
 
+pow(base, exp, mod=None)
+    返回 base 的 exp 次幂；如果 mod 存在，则返回 base 的 exp 次幂对 mod 取余
+        （比 pow(base, exp) % mod 更高效）。
+    两参数形式 pow(base, exp) 等价于乘方运算符: base**exp。
+
+print(*objects, sep=' ', end='\n', file=None, flush=False)
+    将 objects 打印输出至 file 指定的文本流，以 sep 分隔并在末尾加上 end。 
+        sep 、 end 、 file 和 flush 必须以关键字参数的形式给出。
 
 '''
-from share import prn_title
+from share import prn_title, prn_express
 from pprint import pprint
 
+def star_arg(*arg, name = ''):
+    # *arg 参数自动
+    print(f'{arg = }')
+    print(f'{type(arg) = }')
+    print(f'{name = }')
+    print(*arg) 
+    exp =  ["1+2", "打印字符串",
+            "", "",
+            "", "",
+           ]
+    pprint(locals())
+    prn_express(exp, locals=locals())
+def test_star_arg():
+    prn_title('test_star_arg()')
+    star_arg('aaa', 'bbb', 'ccc', name='Li')
+    star_arg(1, 2, 3, 4, name='Andy')
 
 def func_name(x, y):
     print(f'i need two parameter: {x = }, {y = }')
@@ -507,4 +532,5 @@ if __name__ == '__main__':
         prn_title('func_buildin.py')
         test_class_init()
         test_func_name()
+        test_star_arg()
     test()

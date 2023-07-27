@@ -116,10 +116,9 @@ def prn_express(exp, width=None, title=None):
             # 用eval() 求表达式的值，用type() 求值的类型
             # 允许错误的表达式。如果表达式错误，设定一个默认值
             result = eval(exp[i])
-            result_type = type(result)
         except (NameError, SyntaxError, TypeError, ValueError):
             result = 'Error'
-            result_type = '---'
+        result_type = type(result)
         # 每行有四个部分，分别生成格式字符串
         w = width[0] - 1
         # 此处使用 字符串对齐函数，使用切片做裁切
