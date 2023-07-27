@@ -268,12 +268,191 @@ filter(function, iterable)
         如果 function 为 None ，则假定为恒等函数，
         即删除 iterable 中所有为 false 的元素。
 
-'''
+class float(x=0.0)
+    返回从数字或字符串 x 生成的浮点数。
+    x 可以是 "Infinity"  "inf" "nan"
+    对于一般的 Python 对象 x ， float(x) 委托给 x.__float__() 。
+    如果 __float__() 未定义，则返回到 __index__() 。
 
+format(value, format_spec='')
+    将 value 转换为“格式化后”的形式，格式由 format_spec 进行控制。
+        format_spec 的解释方式取决于 value 参数的类型；
+        但大多数内置类型使用一种标准的格式化语法： 格式规格迷你语言。
+     format_spec 
+
+class frozenset(iterable=set())
+    返回一个新的 frozenset 对象，它包含可选参数 iterable 中的元素。 
+        frozenset 是一个内置的类。是不可变并且为 hashable 
+
+getattr()
+    getattr(object, name)
+    getattr(object, name, default)
+    返回对象的命名属性的值。名称必须是字符串。如果字符串是对象属性之一的名称，
+        则结果是该属性的值。例如， getattr(x, 'foobar') 相当于 x.foobar 。如
+        果指定的属性不存在，则返回默认值（如果提供），否则引发 AttributeError 。
+
+globals()
+    返回实现当前模块命名空间的字典。对于函数内的代码，这是在定义函数时设置的，
+    无论函数在哪里被调用都保持不变
+
+hasattr(object, name)
+    该实参是一个对象和一个字符串。如果字符串是对象的属性之一的名称，则返回 True，否则返回 False。
+    （此功能是通过调用 getattr(object, name) 看是否有 AttributeError 异常来实现的。）
+
+hash(object)
+    返回该对象的哈希值（如果它有的话）。哈希值是整数。它们在字典查找元素时用来快速比较字典的键。
+    相同大小的数字变量有相同的哈希值（即使它们类型不同，如 1 和 1.0）。
+
+help(request)
+    启动内置的帮助系统（此函数主要在交互式中使用）。如果没有实参，解释器控制台里会启动交互式帮助系统。
+        如果实参是一个字符串，则在模块、函数、类、方法、关键字或文档主题中搜索该字符串，
+        并在控制台上打印帮助信息。如果实参是其他任意对象，则会生成该对象的帮助页。
+hex(x)
+    将整数转换为前缀为“0x”的小写十六进制字符串。如果 x 不是 Python int 对象，
+        则它必须定义一个返回整数的 __index__() 方法。
+    以下方法也可转换为十六进制
+        '%#x' % 255, '%x' % 255, '%X' % 255
+        format(255, '#x'), format(255, 'x'), format(255, 'X')
+        f'{255:#x}', f'{255:x}', f'{255:X}'
+    浮点数的十六进制字符串形式，请使用 float.hex() 方法。
+
+id(object)
+    返回对象的“标识值”。该值是一个整数，在此对象的生命周期中保证是唯一且恒定的。
+    两个生命期不重叠的对象可能具有相同的 id() 值。
+    CPython实现细节：这是内存中对象的地址。
+
+input(prompt)
+    如果存在 prompt 实参，则将其写入标准输出，末尾不带换行符。
+        接下来，该函数从输入中读取一行，将其转换为字符串（除了末尾的换行符）并返回。
+        当读取到 EOF 时，则触发 EOFError。
+
+class int(x, base=10)
+    返回由数字或字符串 x 构造的整数对象，如果未给出参数，则返回 0 。
+        如果 x 定义 __int__() ，则 int(x) 返回 x.__int__() 。
+        如果 x 定义 __index__() ，则返回 x.__index__() 。
+        如果 x 定义 __trunc__() ，则返回 x.__trunc__() 。
+        对于浮点数，这会截断为零。
+
+isinstance(object, classinfo)
+    如果对象参数是 classinfo 参数或其（直接、间接或虚拟）子类的实例，则返回 True 。
+        如果 object 不是给定类型的对象，则该函数始终返回 False 。如
+
+issubclass(class, classinfo)
+    如果 class 是 classinfo 的子类（直接、间接或 虚的 ），则返回 True。
+
+iter(object, sentinel)   
+    返回一个 iterator 对象。根据是否存在第二个实参，第一个实参的解释是非常不同的。
+    如果没有第二个实参，object 必须是支持 iterable 协议（有 __iter__() 方法）的集合对象，
+        或必须支持序列协议（有 __getitem__() 方法，且数字参数从 0 开始）。
+        如果它不支持这些协议，会触发 TypeError。
+    如果有第二个实参 sentinel，那么 object 必须是可调用的对象。这种情况下生成的迭代器，
+        每次迭代调用它的 __next__() 方法时都会不带实参地调用 object；
+        如果返回的结果是 sentinel 则触发 StopIteration，否则返回调用结果。
+    跟 迭代器 有关的：__iter__ , __next__ , yield
+
+len(s)
+    返回对象的长度（元素个数）。
+    实参可以是序列（如 string、bytes、tuple、list 或 range 等）或
+        集合（如 dictionary、set 或 frozen set 等）。
+
+list(iterable)
+    list 实际上是一种可变序列类型，
+
+map(function, iterable, *iterables)
+    返回一个迭代器，该迭代器将函数应用于可迭代的每个项目，并产生结果。
+        如果传递额外的可迭代参数，函数必须采用那么多参数，并并行应用于所有可迭代的项。
+        对于多个可迭代对象，迭代器会在最短的可迭代对象耗尽时停止。
+    对于函数输入已排列为参数元组的情况，请参阅 itertools.starmap() 
+
+max()
+    max(iterable, *, key=None)
+    max(iterable, *, default, key=None)
+    max(arg1, arg2, *args, key=None)
+    返回可迭代对象中最大的元素，或者返回两个及以上实参中最大的。
+        如果只提供了一个位置参数，它必须是 iterable，返回可迭代对象中最大的元素；
+        如果提供了两个及以上的位置参数，则返回最大的位置参数。
+    有两个可选只能用关键字的实参。
+        key 实参指定排序函数用的参数，如传给 list.sort() 的。
+        default 实参是当可迭代对象为空时返回的值。
+        如果可迭代对象为空，并且没有给 default ，则会触发 ValueError。
+
+memoryview(object)
+    返回由给定实参创建的“内存视图”对象。
+
+min()
+    min(iterable, *, key=None)
+    min(iterable, *, default, key=None)
+    min(arg1, arg2, *args, key=None)
+    返回可迭代对象中最小的元素，或者返回两个及以上实参中最小的。
+        如果只提供了一个位置参数，它必须是 iterable，返回可迭代对象中最小的元素；
+        如果提供了两个及以上的位置参数，则返回最小的位置参数。
+    有两个可选只能用关键字的实参。
+        key 实参指定排序函数用的参数，如传给 list.sort() 的。
+        default 实参是当可迭代对象为空时返回的值。
+        如果可迭代对象为空，并且没有给 default ，则会触发 ValueError。
+
+next(iterator, default)
+    通过调用 iterator 的 __next__() 方法获取下一个元素。如果迭代器耗尽，
+        则返回给定的 default，如果没有默认值则触发 StopIteration。
+
+class object
+    返回一个不带特征的新对象。object 是所有类的基类。
+        它带有所有 Python 类实例均通用的方法。本函数不接受任何参数。
+     由于 object 没有 __dict__，因此无法将任意属性赋给 object 的实例。
+
+oct(x)
+    将整数转换为前缀为“0o”的八进制字符串。如果 x 不是 Python int 对象，
+        则它必须定义一个返回整数的 __index__() 方法。
+
+
+
+'''
 from share import prn_title
+from pprint import pprint
+
+
+def func_name(x, y):
+    print(f'i need two parameter: {x = }, {y = }')
+f2 = func_name
+
+def func_name():
+    print('0 parameter is needed')
+f0 = func_name
+
+def test_func_name():
+    '''同名函数
+    后面的名称会覆盖前面的
+    但仍然可以通过使用别名来调用
+    '''
+    prn_title('test_func_name()')
+    f2(12, 2)
+    f0()
+
+class class_init():
+    '''同名__init__函数会覆盖
+    只有最后一个会有效
+    '''
+    def __init__(self):
+        print('0 parameter required')
+    def __init__(self, x, y=10):
+        print(f'we need two: {x = }', f'{y = }')
+
+def test_class_init():
+    prn_title('test_class_init()')
+    prn_title('dir()')
+    pprint(dir())
+    prn_title('vars()')
+    pprint(vars())
+    try:
+        a = class_init()
+    except TypeError:
+        print('An error occured:\n\t a = class_init()')
+
 
 if __name__ == '__main__':
     print(__doc__)
     def test():
         prn_title('func_buildin.py')
+        test_class_init()
+        test_func_name()
     test()

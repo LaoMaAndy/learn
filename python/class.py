@@ -282,9 +282,7 @@ r'''
 
 # 以下内容是使用public文件夹中的一些自定义类
 import sys
-sys.path.append('./public')
-sys.path.append('../public')
-from some_func import *
+from share import prn_title
 
 class MyRange():
     '''自制的range()类:

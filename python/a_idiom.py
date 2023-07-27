@@ -1,11 +1,79 @@
 #!/usr/bin/env python3
-file_string='''\
-Idiom of python language.
-Python的一些习惯写法，成语以及一些容易出问题的片段。\
-## 函数默认参数问题：
-    def share_arg(i, arg=[])
-
+r''' 成语 / 特殊写法 / 习惯写法
+# 目录：
+    将参数默认值设为可变类型的潜在问题： 
+        def share_arg(i, arg=[])
+    自制的range()类
+        实现了 __iter__(), __next()__
+    自定义类，继承str，并增加__index__()
+        MyStr
 '''
+import sys
+from share import prn_title
+
+def return_a_number(self):
+    # print('')
+    return 77
+
+def test_return_a_number():
+    prn_title('test_return_a_number()')
+    print(f"{return_a_number('a') = }")
+
+class MyStr(str):
+    def __init__(self, arg):
+        str.__init__(arg)
+
+def test_MyStr():
+    prn_title('test_MyStr()')
+    m = MyStr('abcdefghijk')
+    print(f'{m = }')
+    MyStr.__index__ = return_a_number
+    print(f"{int(m) = }")
+
+class MyRange():
+    '''自制的range()类:
+    基本功能与range()相同
+    '''
+    def __init__(self, *arg):
+        self.start = self.end = 0
+        self.step = 1
+        s = len(arg)
+        if s == 1:
+            self.end = arg[0]
+        elif s == 2:
+            self.start = arg[0]
+            self.end = arg[1]
+        elif s >= 3:
+            self.start = arg[0]
+            self.end = arg[1]
+            self.step = arg[2]
+
+        if self.step == 0:
+            raise ValueError('step cannt be 0')
+        self.current = self.start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.step > 0 and self.current < self.end:
+            self.current += self.step
+            return self.current - self.step
+        if self.step < 0 and self.current > self.end:
+            self.current += self.step
+            return self.current - self.step
+        raise StopIteration
+
+def test_myrange():
+    prn_title('test_myrange()')
+    print(f'{list(MyRange(10)) = }')
+    print(f'{list(MyRange(2, 5)) = }')
+    print(f'{list(MyRange(0, 10, 2)) = }')
+    #print(list(MyRange(0, 10, 1, 4)))
+    #print(list(MyRange(0, 10, 0)))
+    print(f'{list(MyRange(10, 9, -2)) = }')
+    print(f'{list(MyRange(10, 0, -1)) = }')
+
 
 ## 函数定义相关 ##
 def share_arg(i, arg=[]):
@@ -45,11 +113,13 @@ def test_dont_share_list_arg():
 
 
 if __name__ == '__main__':
-    def demo():
+    print(__doc__)
+    def test():
         test_share_arg()
         test_dont_share_list_arg()
-        pass
-    print(file_string)
-    demo()
+        test_myrange()
+        test_return_a_number()
+        test_MyStr()
+    test()
 
 
