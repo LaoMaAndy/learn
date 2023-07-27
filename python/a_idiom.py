@@ -12,12 +12,12 @@ import sys
 from share import prn_title
 
 def return_a_number(self):
-    # print('')
-    return 77
+    # print(f'{self = }')
+    return ord(self[0])
 
 def test_return_a_number():
     prn_title('test_return_a_number()')
-    print(f"{return_a_number('a') = }")
+    print(f"{return_a_number('风扇') = }")
 
 class MyStr(str):
     def __init__(self, arg):
@@ -25,7 +25,7 @@ class MyStr(str):
 
 def test_MyStr():
     prn_title('test_MyStr()')
-    m = MyStr('abcdefghijk')
+    m = MyStr('夏天')
     print(f'{m = }')
     MyStr.__index__ = return_a_number
     print(f"{int(m) = }")

@@ -297,12 +297,11 @@ class MyRange():
         elif s == 2:
             self.start = arg[0]
             self.end = arg[1]
-        elif s == 3:
+        elif s >= 3:
             self.start = arg[0]
             self.end = arg[1]
             self.step = arg[2]
-        else:
-            raise TypeError('range expected at most 3 arguments')
+ 
         if self.step == 0:
             raise ValueError('step cannt be 0')
         self.current = self.start
