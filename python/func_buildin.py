@@ -471,22 +471,17 @@ print(*objects, sep=' ', end='\n', file=None, flush=False)
 from share import prn_title, prn_express
 from pprint import pprint
 
-def star_arg(*arg, name = ''):
-    # *arg 参数自动
-    print(f'{arg = }')
-    print(f'{type(arg) = }')
+def star_arg(*pos_arg, name='', **name_arg):
+    # *arg 自动收集所有非命名参数
+    print(f'{pos_arg = }, {name_arg = }')
+    print(f' {type(pos_arg) = } \n {type(name_arg) = }')
     print(f'{name = }')
-    print(*arg) 
-    exp =  ["1+2", "打印字符串",
-            "", "",
-            "", "",
-           ]
-    pprint(locals())
-    prn_express(exp, locals=locals())
+    #print(*arg) 
+
 def test_star_arg():
     prn_title('test_star_arg()')
-    star_arg('aaa', 'bbb', 'ccc', name='Li')
-    star_arg(1, 2, 3, 4, name='Andy')
+    star_arg('aaa', 'bbb', 'ccc', name = 'andy')
+    star_arg(1, 2, 3, 4, name = 'andy')
 
 def func_name(x, y):
     print(f'i need two parameter: {x = }, {y = }')

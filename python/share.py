@@ -9,6 +9,10 @@ r'''自己编写的一些公用函数
 
 import math
 from keyword import iskeyword
+from pprint import pprint
+
+def test_prn_dict():
+    pprint(globals())
 
 def prn_list(list_item, row = 4, width = 0):
     '''打印列表，分多个栏
@@ -194,4 +198,5 @@ if __name__ == '__main__':
         test_prn_title()
         test_prn_list()
         test_print_exp()
+        test_prn_dict()
     test()
