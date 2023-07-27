@@ -1,6 +1,99 @@
 #!/usr/bin/env python3
 r'''
 # 内置函数 Built-in Functions 
+内置函数
+abs()
+aiter()
+all()
+any()
+anext()
+ascii()
+
+bin()
+bool()
+breakpoint()
+bytearray()
+bytes()
+
+callable()
+chr()
+classmethod()
+compile()
+complex()
+
+delattr()
+dict()
+dir()
+divmod()
+
+enumerate()
+eval()
+exec()
+
+filter()
+float()
+format()
+frozenset()
+
+getattr()
+globals()
+
+hasattr()
+hash()
+help()
+hex()
+
+id()
+input()
+int()
+isinstance()
+issubclass()
+iter()
+
+len()
+list()
+locals()
+
+map()
+max()
+memoryview()
+min()
+
+next()
+
+object()
+oct()
+open()
+ord()
+
+pow()
+print()
+property()
+
+range()
+repr()
+reversed()
+round()
+
+set()
+setattr()
+slice()
+sorted()
+staticmethod()
+str()
+sum()
+super()
+
+tuple()
+type()
+
+vars()
+
+zip()
+
+_
+__import__()
+
 abs(x)
     返回一个数的绝对值。 
     参数可以是整数、浮点数或任何实现了 __abs__() 的对象。 
@@ -149,6 +242,31 @@ divmod(a, b)
         对于浮点数则结果为``(q, a % b)``，其中 q 通常为 math.floor(a / b)，但可能比它小 1。
         在任何情况下，q * b + a % b 都非常接近 a，如果 a % b 非零，则结果符号与 b 相同，
         并且 0 <= abs(a % b) < abs(b)。
+
+enumerate(iterable, start=0)
+    返回一个枚举对象。iterable 必须是一个序列，或 iterator，或其他支持迭代的对象。 
+        enumerate() 返回的迭代器的 __next__() 方法返回一个元组，里面包含一个计数值
+        （从 start 开始，默认为 0）和通过迭代 iterable 获得的值。
+
+eval(expression, globals=None, locals=None)
+    实参是一个字符串，以及可选的 globals 和 locals。
+        globals 实参必须是一个字典。
+        locals 可以是任何映射对象。
+    表达式解析参数 expression 并作为 Python 表达式进行求值（从技术上说是一个条件列表），
+        采用 globals 和 locals 字典作为全局和局部命名空间。 
+
+exec(object, globals=None, locals=None, /, *, closure=None)
+    这个函数支持动态执行 Python 代码。 object 必须是字符串或者代码对象。 如果是字符串，
+        那么该字符串将被解析为一系列 Python 语句并执行（除非发生语法错误）。 
+        如果是代码对象，它将被直接执行
+    内置globals() 和 locals() 函数各自返回当前的全局和本地字典，
+        因此可以将它们传递给 exec() 的第二个和第三个实参。
+
+filter(function, iterable)
+    从 iterable 的那些 function 为 true 的元素构造一个迭代器。 
+        iterable 可以是序列、支持迭代的容器或迭代器。
+        如果 function 为 None ，则假定为恒等函数，
+        即删除 iterable 中所有为 false 的元素。
 
 '''
 
