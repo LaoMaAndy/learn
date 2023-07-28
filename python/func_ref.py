@@ -623,13 +623,141 @@ super(type, object_or_type=None)
     除了方法查找之外，super() 也可用于属性查找。 
         一个可能的应用场合是在上级或同级类中调用 描述器。
     
+tuple(iterable)
+    虽然被称为函数，但 tuple 实际上是一个不可变的序列类型，
+        参见在 元组 与 序列类型 --- list, tuple, range 中的文档说明。
 
+type()
+    class type(object)
+    class type(name, bases, dict, **kwds)
+    传入一个参数时，返回 object 的类型。 返回值是一个 type 对象，通常与 object.__class__ 所返回的对象相同。
+        推荐使用 isinstance() 内置函数来检测对象的类型，因为它会考虑子类的情况。
+    传入三个参数时，返回一个新的 type 对象。 这在本质上是 class 语句的一种动态形式，
+        name 字符串即类名并会成为 __name__ 属性；
+        bases 元组包含基类并会成为 __bases__ 属性；如果为空则会添加所有类的终极基类 object。 
+        dict 字典包含类主体的属性和方法定义；它在成为 __dict__ 属性之前可能会被拷贝或包装。 
+    提供给三参数形式的关键字参数会被传递给适当的元类机制 (通常为 __init_subclass__())，
+        相当于类定义中关键字 (除了 metaclass) 的行为方式。
+    在 3.6 版更改: type 的子类如果未重载 type.__new__，将不再能使用一个参数的形式来获取对象的类型。
+    举例：
+        下面两条语句会创建相同的 type 对象:
+        class X:
+            a = 1
+
+        X = type('X', (), dict(a=1))
+vars(object)
+    返回模块、类、实例或任何其它具有 __dict__ 属性的对象的 __dict__ 属性。
+    模块和实例这样的对象具有可更新的 __dict__ 属性；但是，其它对象的 __dict__ 属性可能会设为限制写入
+        （例如，类会使用 types.MappingProxyType 来防止直接更新字典）。
+    不带参数时，vars() 的行为类似 locals()。 
+        请注意，locals 字典仅对于读取起作用，因为对 locals 字典的更新会被忽略。
+    如果指定了一个对象但它没有 __dict__ 属性
+        （例如，当它所属的类定义了 __slots__ 属性时）则会引发 TypeError 异常。
+
+zip(*iterables, strict=False)
+    在多个迭代器上并行迭代，从每个迭代器返回一个数据项组成元组。
+    更正式的说法： zip() 返回元组的迭代器，其中第 i 个元组包含的是每个参数迭代器的第 i 个元素。
+        不妨换一种方式认识 zip() ：它会把行变成列，把列变成行。这类似于 矩阵转置 。
+    zip() 是延迟执行的：直至迭代时才会对元素进行处理，比如 for 循环或放入 list 中。
+        值得考虑的是，传给 zip() 的可迭代对象可能长度不同；
+        有时是有意为之，有时是因为准备这些对象的代码存在错误。
+    Python 提供了三种不同的处理方案：
+        默认情况下，zip() 在最短的迭代完成后停止。较长可迭代对象中的剩余项将被忽略，
+            结果会裁切至最短可迭代对象的长度：
+        通常 zip() 用于可迭代对象等长的情况下。这时建议用 strict=True 的选项。
+            输出与普通的 zip() 相同：。
+        与默认行为不同，如果一个可迭代对象先于其他可迭代对象耗尽，它会引发 ValueError
+            如果未指定 strict=True 参数，所有导致可迭代对象长度不同的错误都会被抑制，
+            这可能会在程序的其他地方表现为难以发现的错误。
+        为了让所有的可迭代对象具有相同的长度，长度较短的可用常量进行填充。
+            这可由 itertools.zip_longest() 来完成。
+    极端例子是只有一个可迭代对象参数，zip() 会返回一个一元组的迭代器。如果未给出参数，则返回一个空的迭代器。
+    小技巧：
+        可确保迭代器的求值顺序是从左到右的。这样就能用 zip(*[iter(s)]*n, strict=True) 将数据列表按长度 n 进行分组。
+            这将重复 相同 的迭代器 n 次，输出的每个元组都包含 n 次调用迭代器的结果。
+            这样做的效果是把输入拆分为长度为 n 的块。
+        zip() 与 * 运算符相结合可以用来拆解一个列表:
+            # 重新组合
+            x = [1, 2, 3]
+            y = [4, 5, 6]
+            list(zip(x, y))
+            # 还原
+            x2, y2 = zip(*zip(x, y))
+            x == list(x2) and y == list(y2)
+
+__import__(name, globals=None, locals=None, fromlist=(), level=0)
+    备注 与 importlib.import_module() 不同，这是一个日常 Python 编程中不需要用到的高级函数。
+    此函数会由 import 语句发起调用。 它可以被替换 (通过导入 builtins 模块并赋值给 builtins.__import__) 
+        以便修改 import 语句的语义，但是 强烈 不建议这样做，
+        因为使用导入钩子 (参见 PEP 302) 通常更容易实现同样的目标，
+        并且不会导致代码问题，因为许多代码都会假定所用的是默认实现。 
+    同样也不建议直接使用 __import__() 而应该用 importlib.import_module()。
 '''
 from share import prn_title, prn_express
 from pprint import pprint
 
+def test_zip():
+    prn_title('test_zip()')
+    print('Build a dict from zip():')
+    d = {k:v for k, v in zip(range(10), 'abcdefghij')}
+    print(f'{d = }')
+
+    # 默认情况下，strict=False, 将忽略长度不同问题 ：
+    for item in zip(range(3), ['fee', 'fi', 'fo', 'fum']):  
+        print(item)
+    print('Zip OK'.center(20, '-'))
+    # 与默认行为不同，如果一个可迭代对象先于其他可迭代对象耗尽，它会引发 ValueError ：
+    #for item in zip(range(3), ['fee', 'fi', 'fo', 'fum'], strict=True):  
+    #    print(item)
+    x = [1, 2, 3]
+    y = [4, 5, 6]
+    list(zip(x, y))
+    z = zip(*['abc']*3)
+    s = 'xyz'
+    exp = [
+        "print(zip(*['abc']*3))"
+        ,"print(list(z))"
+        ,"print(*['abc'])"
+        ,"print(*'abc')"
+        ,"print('abc'*3)"
+        ,"print(['abc']*3)"
+        ,"print(*'abc'*3)"
+        ,"print(*['abc']*3)"
+        ,"print(x)"
+        ,"print(y)"
+        ]
+    for line in exp:
+        line = line.strip()
+        if len(line) == 0:
+            continue
+        print(line.ljust(30), end = '')
+        print(' : ', end = '')
+        try:
+            eval(line)
+        except:
+            print()
+            continue
+
+    print(zip(*['abc']*3))
+    print(list(z))
+    print(*['abc'])
+    print(*'abc')
+    print('abc'*3)
+    print(['abc']*3)
+    print(*'abc'*3)
+    print(*['abc']*3)
+    print(x)
+    print(y)
+    x2, y2 = zip(*zip(x, y))
+    print(f'{x2 = }')
+    print(f'{y2 = }')
+    x2, y2 = zip(*zip(x, y))
+    print(f'{x2 = }')
+    print(f'{y2 = }')
+    print(f'{x == list(x2) and y == list(y2) = }')
+
 def test_super_class():
-    prn_title('test_super_class(')
+    prn_title('test_super_class()')
     class MyStr(str):
         def __init__(self, *arg, **kwarg):
             super().__init__(*arg, **kwarg)
@@ -771,4 +899,5 @@ if __name__ == '__main__':
         test_b_decorator()
         test_readonly_property()
         test_super_class()
+        test_zip()
     test()
