@@ -466,10 +466,224 @@ pow(base, exp, mod=None)
 print(*objects, sep=' ', end='\n', file=None, flush=False)
     将 objects 打印输出至 file 指定的文本流，以 sep 分隔并在末尾加上 end。 
         sep 、 end 、 file 和 flush 必须以关键字参数的形式给出。
+    所有非关键字参数都会被转换为字符串，就像是执行了 str() 一样，并会被写入到流，
+        以 sep 分隔，且在末尾加上 end。 sep 和 end 都必须为字符串；
+        它们也可以为 None，这意味着使用默认值。 如果没有给出 objects，则 print() 将只写入 end。
+    file 参数必须是一个具有 write(string) 方法的对象；如果参数不存在或为 None，
+        则将使用 sys.stdout。 由于要打印的参数会被转换为文本字符串，
+        因此 print() 不能用于二进制模式的文件对象。 
+        对于这些对象，应改用 file.write(...)。
+    输出缓冲通常由文件决定。然而，如果flush为true，流将被强制刷新。
 
+property(fget=None, fset=None, fdel=None, doc=None)
+    fget 是获取属性值的函数。 
+    fset 是用于设置属性值的函数。 
+    fdel 是用于删除属性值的函数。并且 
+    doc 为属性对象创建文档字符串。
+  举例：
+    class C:
+        def __init__(self):
+            self._x = None
+
+        def getx(self):
+            print('getx: ', self._x)
+            return self._x
+
+        def setx(self, value):
+            self._x = value
+            print('setx: ', self._x)
+
+        def delx(self):
+            del self._x
+
+        x = property(getx, setx, delx, "I'm the 'x' property.")
+  装饰器式设置 property 更为简单
+  property用作装饰器的属性： setter，getter，deleter
+  举例：
+    class C:
+        def __init__(self):
+            self._x = None
+        @property
+        def x(self):
+            print(f'getter: {self._x = }')
+            return self._x
+        @x.setter
+        def x(self, value):
+            self._x = value
+            print(f'setter: {self._x = }')
+        @x.deleter
+        def x(self):
+            del self._x
+            print('del self._x')
+    上述代码与第一个例子完全等价。 
+    注意一定要给附加函数与原始的特征属性相同的名称 (在本例中为 x。)
+
+range()
+    class range(stop)
+    class range(start, stop, step=1)
+    虽然被称为函数，但 range 实际上是一个不可变的序列类型。
+
+repr(object)
+    返回一个包含对象的可打印表示形式的字符串。对于许多类型，此函数会尝试返回一个字符串，
+        该字符串在传递给 eval() 时会产生具有相同值的对象；
+    否则，表示形式是一个括在尖括号中的字符串，其中包含对象类型的名称以及通常包括对象的
+        名称和地址的附加信息。
+    类可以通过定义 __repr__() 方法来控制该函数为其实例返回的内容。
+        如果 sys.displayhook() 不可访问，此函数将引发 RuntimeError 。
+reversed(seq)
+    返回一个反向的 iterator。 seq 必须是一个具有 __reversed__() 方法的对象
+    或者是支持该序列协议（具有从 0 开始的整数类型参数的 __len__() 方法和 __getitem__() 方法）。
+
+round(number, ndigits=None)
+    返回 number 舍入到小数点后 ndigits 位精度的值。 
+        如果 ndigits 被省略或为 None，则返回最接近输入值的整数。
+    如果与两个倍数同样接近，则选用偶数。
+        因此，round(0.5) 和 round(-0.5) 均得出 0 而 round(1.5) 则为 2
+    备注 对浮点数执行 round() 的行为可能会令人惊讶：
+        例如，round(2.675, 2) 将给出 2.67 而不是期望的 2.68。 
+        这不算是程序错误：这一结果是由于大多数十进制小数实际上都不能以浮点数精确地表示。
+
+set(iterable)
+    返回一个新的 set 对象，可以选择带有从 iterable 获取的元素。 set 是一个内置类型。 
+    请查看 set 和 集合类型 --- set, frozenset
+
+setattr(object, name, value)
+    本函数与 getattr() 相对应。其参数为一个对象、一个字符串和一个任意值。
+        字符串可以为某现有属性的名称，或为新属性。只要对象允许，函数会将值赋给属性。
+    如 setattr(x, 'foobar', 123) 等价于 x.foobar = 123。
+
+slice()
+    class slice(stop)
+    class slice(start, stop, step=1)
+    返回一个 slice 对象，代表由 range(start, stop, step) 指定索引集的切片。 
+        其中参数 start 和 step 的默认值为 None。
+        切片对象具有只读数据属性 start 、stop 和 step，
+        只是返回对应的参数值（或默认值）。这几个属性没有其他明确的功能；
+    不过 NumPy 和其他第三方扩展会用到。在使用扩展索引语法时，也会生成切片对象。
+    例如： a[start:stop:step] 或 a[start:stop, i]。 另一种方案是返回迭代器对象。
+
+sorted(iterable, /, *, key=None, reverse=False)
+    根据 iterable 中的项返回一个新的已排序列表。
+    具有两个可选参数，它们都必须指定为关键字参数。
+    key 指定带有单个参数的函数，用于从 iterable 的每个元素中提取用于比较的键 
+        (例如 key=str.lower)。 默认值为 None (直接比较元素)。
+    reverse 为一个布尔值。 如果设为 True，则每个列表元素将按反向顺序比较进行排序。
+    使用 functools.cmp_to_key() 可将老式的 cmp 函数转换为 key 函数。
+    内置的 sorted() 确保是稳定的。 
+        如果一个排序确保不会改变比较结果相等的元素的相对顺序就称其为稳定的 
+        --- 这有利于进行多重排序（例如先按部门、再按薪级排序）。
+    
+    排序算法只使用 < 在项目之间比较。 虽然定义一个 __lt__() 方法就足以进行排序，
+        但 PEP 8 建议实现所有六个 富比较 。
+
+@staticmethod
+    将方法转换为静态方法。
+        静态方法不会接收隐式的第一个参数。要声明一个静态方法，请使用此语法
+    静态方法既可以由类中调用（如 C.f()），也可以由实例中调用（如 C().f() ）。
+        此外，还可以作为普通的函数进行调用（如 f() ）
+    @staticmethod 这样的形式称为函数的 decorator
+    举例；
+        class C:
+        @staticmethod
+        def f(arg1, arg2, argN): ...
+
+str(object=b'', encoding='utf-8', errors='strict')
+    返回一个 str 版本的 object 。有关详细信息，请参阅 str() 。
+    str 是内置字符串 class 。更多关于字符串的信息查看 文本序列类型 --- str。
+
+sum(iterable, /, start=0)
+    从 start 开始自左向右对 iterable 的项求和并返回总计值。 
+        iterable 的项通常为数字，而 start 值则不允许为字符串。
+    对某些用例来说，存在 sum() 的更好替代。 
+        拼接字符串序列的更好更快方式是调用 ''.join(sequence)。 
+        要以扩展精度对浮点值求和，请参阅 math.fsum()。 
+        要拼接一系列可迭代对象，请考虑使用 itertools.chain()。
+
+super(type, object_or_type=None)
+    返回一个代理对象，它会将方法调用委托给 type 的父类或兄弟类。 
+        这对于访问已在类中被重载的继承方法很有用。
+    object_or_type 确定要搜索的方法解析顺序。搜索从类型之后的类开始。
+        例如，如果 object_or_type 的 __mro__ 为 D -> B -> C -> A -> object 
+            并且 type 的值为 B ，则 super() 搜索 C -> A -> object .
+    object_or_type 的 __mro__ 属性列出了 getattr() 和 super() 使用的方法解析搜索顺序。
+        该属性是动态的，并且可以在继承层次结构更新时更改。
+    
 '''
 from share import prn_title, prn_express
 from pprint import pprint
+
+def test_readonly_property():
+    prn_title('test_readonly_property()')
+    class P:
+        def __init__(self):
+            self._val = 'value is read only'
+        @property
+        def val(self):
+            return self._val
+    p = P()
+    print(f'{p.val = }')
+    setattr(p, 'new_val', ' ')
+    #setattr(p, 'val', ' ')
+    #p.val = ''
+
+def test_b_decorator():
+    prn_title('test_b_decorator()')
+    class C:
+        def __init__(self):
+            self._x = None
+        @property
+        def x(self):
+            print(f'getter: {self._x = }')
+            return self._x
+        @x.setter
+        def x(self, value):
+            self._x = value
+            print(f'setter: {self._x = }')
+        @x.deleter
+        def x(self):
+            del self._x
+            print('del self._x')
+    c = C()
+    c.x = 1122
+    d = c.x 
+    del c.x
+
+        
+def test_decorator():
+    prn_title('test_decorator()')
+    class Parrot:
+        def __init__(self):
+            self._voltage = 100000
+
+        @property
+        def voltage(self):
+            """Get the current voltage."""
+            print('This is getter: ', self._voltage)
+            return self._voltage
+    p = Parrot()
+    v = p.voltage
+
+def test_property():
+    prn_title('test_property()')
+    class C:
+        def __init__(self):
+            self._x = None
+
+        def getx(self):
+            print('getx: ', self._x)
+            return self._x
+
+        def setx(self, value):
+            self._x = value
+            print('setx: ', self._x)
+
+        def delx(self):
+            del self._x
+
+        x = property(getx, setx, delx, "I'm the 'x' property.")
+    c = C()    
+    c.x = 20
+    print(f'{c.x = }')
 
 def star_arg(*pos_arg, name='', **name_arg):
     # *arg 自动收集所有非命名参数
@@ -528,4 +742,8 @@ if __name__ == '__main__':
         test_class_init()
         test_func_name()
         test_star_arg()
+        test_property()
+        test_decorator()
+        test_b_decorator()
+        test_readonly_property()
     test()
