@@ -255,10 +255,135 @@ r'''
         因此，实现多任务协作的首选方法是将所有对资源的请求集中到一个线程中，
         然后使用 queue 模块向该线程供应来自其他线程的请求。 
         应用程序使用 Queue 对象进行线程间通信和协调，更易于设计，更易读，更可靠。
+    举例
+        class AsyncZip(threading.Thread):
+            def __init__(self, infile, outfile):
+                threading.Thread.__init__(self)
+                self.infile = infile
+                self.outfile = outfile
 
+            def run(self):
+                f = zipfile.ZipFile(self.outfile, 'w', zipfile.ZIP_DEFLATED)
+                f.write(self.infile)
+                f.close()
+                print('Finished background zip of:', self.infile)
 
+        def test_AsyncZip():
+            background = AsyncZip('test_big.txt', 'test_big.zip')
+            background.start()
+            print('The main program continues to run in foreground.')
+            background.join()    # Wait for the background task to finish
+            print('Main program waited until background was done.')
 
+# 日志记录 logging
+  Logging
+    logging 模块提供功能齐全且灵活的日志记录系统。在最简单的情况下，日志消息被发送到文件或 sys.stderr
+    默认情况下，informational 和 debugging 消息被压制，输出会发送到标准错误流。
+        其他输出选项包括将消息转发到电子邮件，数据报，套接字或 HTTP 服务器。
+        新的过滤器可以根据消息优先级选择不同的路由方式：DEBUG，INFO，WARNING，ERROR，和 CRITICAL。
+    日志系统可以直接从 Python 配置，也可以从用户配置文件加载，以便自定义日志记录而无需更改应用程序。
+    举例：
+        import logging
+        logging.debug('Debugging information')
+        logging.info('Informational message')
+        logging.warning('Warning:config file %s not found', 'server.conf')
+        logging.error('Error occurred')
+        logging.critical('Critical error -- shutting down')
 
+#  弱引用 weakref , gc
+Weak References
+    Python 会自动进行内存管理（对大多数对象进行引用计数并使用 garbage collection 来清除循环引用）。 
+        当某个对象的最后一个引用被移除后不久就会释放其所占用的内存。
+    此方式对大多数应用来说都适用，但偶尔也必须在对象持续被其他对象所使用时跟踪它们。 
+        不幸的是，跟踪它们将创建一个会令其永久化的引用。 weakref 模块提供的工具可以不必创建引用就能跟踪对象。 
+        当对象不再需要时，它将自动从一个弱引用表中被移除，并为弱引用对象触发一个回调。 
+        典型应用包括对创建开销较大的对象进行缓存
+    举例
+        import weakref, gc
+        class A:
+            def __init__(self, value):
+                self.value = value
+            def __repr__(self):
+                return str(self.value)
+
+        a = A(10)                   # create a reference
+        d = weakref.WeakValueDictionary()
+        d['primary'] = a            # does not create a reference
+        d['primary']                # fetch the object if it is still alive
+
+        del a                       # remove the one reference
+        gc.collect()                # run garbage collection right away
+
+        d['primary']                # entry was automatically removed
+
+# 用于操作列表的工具 array , bisect , heapq , collections
+  Tools for Working with Lists
+    许多对于数据结构的需求可以通过内置列表类型来满足。 
+        但是，有时也会需要具有不同效费比的替代实现。
+    array 模块提供了一种 array() 对象，它类似于列表，但只能存储类型一致的数据且存储密集更高。 
+        下面的例子演示了一个以两个字节为存储单元的无符号二进制数值的数组 (类型码为 "H")，
+        而对于普通列表来说，每个条目存储为标准 Python 的 int 对象通常要占用16 个字节:
+    举例：
+        from array import array
+        a = array('H', [4000, 10, 700, 22222])
+        sum(a)
+        a[1:3]
+    
+    collections 模块提供了一种 deque() 对象，它类似于列表，但从左端添加和弹出的速度较快，
+        而在中间查找的速度较慢。 此种对象适用于实现队列和广度优先树搜索:
+    举例
+        from collections import deque
+        d = deque(["task1", "task2", "task3"])
+        d.append("task4")
+        print("Handling", d.popleft())
+        # ---
+        unsearched = deque([starting_node])
+        def breadth_first_search(unsearched):
+            node = unsearched.popleft()
+            for m in gen_moves(node):
+                if is_goal(m):
+                    return m
+                unsearched.append(m)
+    
+    在替代的列表实现以外，标准库也提供了其他工具，例如 bisect 模块具有用于操作有序列表的函数
+        import bisect
+        scores = [(100, 'perl'), (200, 'tcl'), (400, 'lua'), (500, 'python')]
+        bisect.insort(scores, (300, 'ruby'))
+        scores
+    
+    heapq 模块提供了基于常规列表来实现堆的函数。 最小值的条目总是保持在位置零。 
+        这对于需要重复访问最小元素而不希望运行完整列表排序的应用来说非常有用:
+    举例：
+        from heapq import heapify, heappop, heappush
+        data = [1, 3, 5, 7, 9, 2, 4, 6, 8, 0]
+        heapify(data)                      # rearrange the list into heap order
+        heappush(data, -5)                 # add a new entry
+        [heappop(data) for i in range(3)]  # fetch the three smallest entries
+
+# 十进制浮点运算
+  Decimal Floating Point Arithmetic
+    decimal 模块提供了一种 Decimal 数据类型用于十进制浮点运算。 相比内置的 float 
+    二进制浮点实现，该类特别适用于：
+        财务应用和其他需要精确十进制表示的用途，
+        控制精度，
+        控制四舍五入以满足法律或监管要求，
+        跟踪有效小数位，或
+        用户期望结果与手工完成的计算相匹配的应用程序。
+    例如，使用十进制浮点和二进制浮点数计算70美分手机和5％税的总费用，会产生的不同结果。
+    如果结果四舍五入到最接近的分数差异会更大:
+        from decimal import *
+        round(Decimal('0.70') * Decimal('1.05'), 2)
+        round(.70 * 1.05, 2)
+    Decimal 表示的结果会保留尾部的零，并根据具有两个有效位的被乘数自动推出四个有效位。 
+    Decimal 可以模拟手工运算来避免当二进制浮点数无法精确表示十进制数时会导致的问题。
+    精确表示特性使得 Decimal 类能够执行对于二进制浮点数来说不适用的模运算和相等性检测:
+        Decimal('1.00') % Decimal('.10')
+        1.00 % 0.10
+        sum([Decimal('0.1')]*10) == Decimal('1.0')
+        sum([0.1]*10) == 1.0
+    decimal 模块提供了运算所需要的足够精度:
+        getcontext().prec = 36
+        Decimal(1) / Decimal(7)
 '''
 import time, os.path
 import struct
