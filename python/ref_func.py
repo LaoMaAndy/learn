@@ -607,7 +607,20 @@ super(type, object_or_type=None)
             并且 type 的值为 B ，则 super() 搜索 C -> A -> object .
     object_or_type 的 __mro__ 属性列出了 getattr() 和 super() 使用的方法解析搜索顺序。
         该属性是动态的，并且可以在继承层次结构更新时更改。
+    super 有两个典型用例。 在具有单继承的类层级结构中，super 可用来引用父类而不必显式地指定它们的名称，
+        从而令代码更易维护。 这种用法与其他编程语言中 super 的用法非常相似。
+    第二个用例是在动态执行环境中支持协作多重继承。 此用例为 Python 所独有而不存在于静态编码语言或仅支持单继承的语言当中。 
+        这使用实现“菱形图”成为可能，即有多个基类实现相同的方法。 
+        好的设计强制要求这样的方法在每个情况下都具有相同的调用签名
+        （因为调用顺序是在运行时确定的，也因为这个顺序要适应类层级结构的更改，
+            还因为这个顺序可能包括在运行时之前未知的兄弟类）。
+    举例：
+        class C(B):
+            def method(self, arg):
+                super().method(arg)    # This does the same thing as:
+                                       # super(C, self).method(arg)
     
+
 '''
 from share import prn_title, prn_express
 from pprint import pprint
