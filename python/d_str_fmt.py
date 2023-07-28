@@ -244,6 +244,9 @@ r'''
 使用方法：
   导入库：
     from string import Template
+  占位符： $占位符名称 或者 ${占位符名称}
+    定义模版字符串： t = Template() 
+    替换模版字符串 t.substitute() / t.t2.safe_substitute(d)
   一般使用：
     s = Template('$who likes $what')
     s.substitute(who='tim', what='kung pao')
