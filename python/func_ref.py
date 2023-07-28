@@ -620,11 +620,22 @@ super(type, object_or_type=None)
                 super().method(arg)    # This does the same thing as:
                                        # super(C, self).method(arg)
     
+    除了方法查找之外，super() 也可用于属性查找。 
+        一个可能的应用场合是在上级或同级类中调用 描述器。
+    
 
 '''
 from share import prn_title, prn_express
 from pprint import pprint
 
+def test_super_class():
+    prn_title('test_super_class(')
+    class MyStr(str):
+        def __init__(self, *arg, **kwarg):
+            super().__init__(*arg, **kwarg)
+
+    my_str = MyStr()
+    
 def test_readonly_property():
     prn_title('test_readonly_property()')
     class P:
@@ -759,4 +770,5 @@ if __name__ == '__main__':
         test_decorator()
         test_b_decorator()
         test_readonly_property()
+        test_super_class()
     test()

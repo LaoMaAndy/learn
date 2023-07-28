@@ -158,9 +158,8 @@ r'''
     列表可以嵌套
 '''
 
-import sys 
-sys.path.append('../public') 
-from print_exp import *
+
+from share import *
 
 def int_or_float():
     r'''不同表达式的值和类型
