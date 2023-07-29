@@ -2,35 +2,49 @@
 r'''
 # 类相关概念：
     面向对象编程
-        Object Oriented Programming
+    Object Oriented Programming
+
     类型，实例，属性，方法
-        type, instance, attribute, method
+    type, instance, attribute, method
+    
     继承，基类，派生类，重载
-        inheritance, base classes, derived class, override
+    inheritance, base classes, derived class, override
+    
     运行时创建，创建后可以修改
-        created at runtime, modified after creation
+    created at runtime, modified after creation
+    
     成员， 公共， 私有， 虚拟
-        member, public, private, virtual
+    member, public, private, virtual
+
     方法的第一个参数显式声明对象本身
-        An explicit first argument representing the object
+    An explicit first argument representing the object
+
     调用方法时隐式提供
-        provided implicitly by the call
+    provided implicitly by the call
+
     类本身就是对象
-        classes themselves are objects
+    classes themselves are objects
+
     用户可以使用内置的作为基类进行扩展
-        built-in types can be used as base classes by user
+    built-in types can be used as base classes by user
+
     内置运算符可以被重定义
-        built-in operators can be redefined
+    built-in operators can be redefined
+
     模块，属性
-        module, attribute
+    module, attribute
+
     命名空间有不同的声明周期
-        Namespaces have different lifetimes
+    Namespaces have different lifetimes
+
     作用域
-        scope
+    scope
+
     类对象、实例对象、函数对象、方法对象
-        Class Object, Instance Object, function object, Method Object
+    Class Object, Instance Object, function object, Method Object
+
     类变量、实例变量
-        Class Variable、Instance Variable
+    Class Variable、Instance Variable
 
 # 对象和名称：一个对象可以绑定多个名称
 
@@ -39,9 +53,9 @@ r'''
 # 命名空间 namespace: 从名称到对象的映射
     大多数使用字典实现
     不同的模块可以都定义同名函数而不会混淆
-      使用时，必须在其前面加上模块名称。
+        使用时，必须在其前面加上模块名称。
     模块属性和模块中定义的全局名称之间存在直接的映射：
-      它们共享相同的命名空间！
+        它们共享相同的命名空间！
     属性可以是只读或者可写的。del 语句可以删除可写属性。
     命名空间是在不同时刻创建的，且拥有不同的生命周期。
       内置名称的命名空间永远不会被删除。
@@ -107,8 +121,26 @@ r'''
       x.f() 与 MyClass.f(x) 完全相同
 
 # 类变量和实例变量
-    类变量为所有的实例共享
-      可以调用类变量的方法，简介修改类变量，此时，所有实例都将同时修改
+    *** 类变量 正确的使用 ***
+        > 永远使用 类名.类变量 的方式
+        > 避免 类变量 和 实例变量 重名
+    *** 类变量被“覆盖” ***
+    可理解为：
+        a) 类变量只能通过 类名.变量名 的方式修改
+        b) 对于实例来说，类变量是只读的，
+        c) 实例对类变量的修改，会发生覆盖。
+    一般来说
+        1）如果在 类函数中 对 “类变量” 进行 “重新赋值”，则：
+            导致 “类变量” 被 覆盖：将产生一个同名的 “实例变量”，覆盖 “类变量”，
+            而其他实例不受影响
+        2）引用 “类变量”， 不会导致 “类变量” 被覆盖
+        3）通过 “类名” 修改 “类变量”，则：
+            所有实例都受到影响，
+            除非某个实例中，类变量已经被“覆盖”
+        4）除非执行了相关语句，否则 “覆盖” 不会发生。
+        5）通过 “实例” 直接访问 “类变量”， 效果相同。
+    或者：
+      可以调用类变量的方法，修改类变量，此时，所有实例都将同时修改
       如果将类变量重新赋值，将产生一个局部变量，该变量不影响其他对象的类变量
     实例变量对于每一个实例不同
     可以在运行时新增类变量
@@ -283,6 +315,60 @@ r'''
 # 以下内容是使用public文件夹中的一些自定义类
 import sys
 from share import prn_title
+
+class C1():
+    ''' 再次实验一下类变量、实例变量
+    '''
+    pub_l = [1, 2, 3]
+    pub_list_2 = [4, 5, 6]
+    pub_s = 'pub string'
+    def __init__(self, a):
+        self.private = 'private'
+        title = a + ' : init'
+        self.prn(title)
+    def change(self, a):
+        C1.pub_s += ' + '
+        C1.pub_s += a
+        self.pub_l.append(a)
+        self.pub_list_2 = list([a])
+        self.private = a
+        title = 'change: ' + a
+        self.prn(title)
+    def prn(self, a='prn'):
+        print(a.center(30, '-'))
+        print(f'{self.pub_l      = }')
+        print(f'{self.pub_s      = }')
+        print(f'{self.pub_list_2 = }')
+        print(f'{self.private    = }')
+        print()
+
+def test_C1():
+    print('再次实验类变量、实例变量'.center(30, '='))
+    a = C1('a')
+    b = C1('b')
+    c = C1('c')
+    # 修改类变量和实例变量
+    a.change('changed by a')
+    b.prn('b')
+    c.prn('c')
+    # 使用类名修改类变量
+    s = 'By Class C1'
+    C1.pub_s = s
+    print(s)
+    # 查看各实例
+    a.prn('a')
+    b.prn('b')
+    c.prn('c')
+
+    a.pub_l = ['----']
+    a.prn('a')
+    b.prn('b')
+    c.prn('c')
+
+    a.pub_l.append('******')
+    a.prn('a')
+    b.prn('b')
+    c.prn('c')
 
 class MyRange():
     '''自制的range()类:
@@ -554,4 +640,5 @@ if __name__ == '__main__':
         test_override()
         test_name_mangling()
         test_myrange()
+        test_C1()
     test()
