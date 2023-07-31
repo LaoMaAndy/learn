@@ -122,9 +122,10 @@ lambda表达式
 '''
 from pprint import pprint
 
-def foo_vars():
+def foo_vars(s=''):
     i = int()
     l = list()
+    print(s)
     def foo():
         pass
     print('vars()'.center(30, '-'))
@@ -135,7 +136,9 @@ def foo_vars():
     pprint(locals())
     print('vars(foo_vars)'.center(30, '-'))
     pprint(vars(foo_vars))
-
+    print('add a variable:')
+    foo_vars.new_vari = 777
+    pprint(vars(foo_vars))
 
 def ret_self(b=10, add=20):
     '''返回函数自身
@@ -371,7 +374,7 @@ if __name__ == '__main__':
         # test_a_lambda()
         test_ret_func()
         # outer_foo()
-        foo_vars()
+        foo_vars('test')
     print(__doc__)
     demo()
 
