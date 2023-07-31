@@ -120,6 +120,23 @@ lambda表达式
     - 使用 UTF-8 编写代码文件
     - 不要在标识符中使用非 ASCII 字符。
 '''
+from pprint import pprint
+
+def foo_vars():
+    i = int()
+    l = list()
+    def foo():
+        pass
+    print('vars()'.center(30, '-'))
+    pprint(vars())
+    print('foo_vars.__dict__'.center(30, '-'))
+    pprint(foo_vars.__dict__)
+    print('locals()'.center(30, '-'))
+    pprint(locals())
+    print('vars(foo_vars)'.center(30, '-'))
+    pprint(vars(foo_vars))
+
+
 def ret_self(b=10, add=20):
     '''返回函数自身
     若返回自身函数，则相当于递归调用，
@@ -354,6 +371,7 @@ if __name__ == '__main__':
         # test_a_lambda()
         test_ret_func()
         # outer_foo()
+        foo_vars()
     print(__doc__)
     demo()
 

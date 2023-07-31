@@ -92,6 +92,7 @@ vars()
 zip()
 
 _
+
 __import__()
 
 abs(x)
@@ -647,7 +648,8 @@ type()
         X = type('X', (), dict(a=1))
 vars(object)
     返回模块、类、实例或任何其它具有 __dict__ 属性的对象的 __dict__ 属性。
-    模块和实例这样的对象具有可更新的 __dict__ 属性；但是，其它对象的 __dict__ 属性可能会设为限制写入
+    模块和实例这样的对象具有可更新的 __dict__ 属性；
+        但是，其它对象的 __dict__ 属性可能会设为限制写入
         （例如，类会使用 types.MappingProxyType 来防止直接更新字典）。
     不带参数时，vars() 的行为类似 locals()。 
         请注意，locals 字典仅对于读取起作用，因为对 locals 字典的更新会被忽略。
