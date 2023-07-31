@@ -315,6 +315,36 @@ r'''
 # 以下内容是使用public文件夹中的一些自定义类
 import sys
 from share import prn_title
+from pprint import pprint
+
+class InstMethod:
+    def foo(self, s = ''):
+        print(s)
+        i = int()
+        l = list()
+    def prn(self):
+        print(f'{InstMethod.__name__}')
+
+
+def test_InstMethod():
+    '''实力方法：
+    特殊只读属性：
+        __self__ 为类实例对象本身
+        __func__ 为函数对象
+        __doc__ 为方法的文档 (与 __func__.__doc__ 作用相同)
+        __name__ 为方法名称 (与 __func__.__name__ 作用相同)；
+        __module__ 为方法所属模块的名称，没有则为 None。
+    '''
+    prn_title('test_InstMethod()')
+    ci = InstMethod()
+    print(f'{ci.foo.__self__ = }')
+    print(f'{ci.foo.__name__ = }')
+    print(f'{ci.foo.__module__ = }')
+    # print(f'{ci.__self__ = }')    # __self__ 无定义
+    print('vars(ci)'.center(20, '-'))
+    pprint(vars(ci))
+    print('-'*30)
+    ci.prn()
 
 class C1():
     ''' 再次实验一下类变量、实例变量
@@ -641,4 +671,5 @@ if __name__ == '__main__':
         test_name_mangling()
         test_myrange()
         test_C1()
+        test_InstMethod()
     test()

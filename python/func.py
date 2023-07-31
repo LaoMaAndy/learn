@@ -121,24 +121,33 @@ lambda表达式
     - 不要在标识符中使用非 ASCII 字符。
 '''
 from pprint import pprint
+from share import prn_title
 
-def foo_vars(s=''):
+def funcvars(arg=''):
+    prn_title('funcvars()')
     i = int()
     l = list()
-    print(s)
+    print('函数参数:', arg)
     def foo():
         pass
-    print('vars()'.center(30, '-'))
+    print(f'{funcvars.__doc__ = }')
+    print(f'{funcvars.__name__ = }')
+    print(f'{funcvars.__qualname__ = }')
+    print(f'{funcvars.__module__ = }')
+    print(f'{funcvars.__defaults__ = }')
+    print(f'{funcvars.__code__ = }')
+    #print(f'{funcvars.__globals__ = }')
+    print(f'{funcvars.__dict__ = }')
+    print(f'{funcvars.__closure__ = }')
+    print(f'{funcvars.__annotations__ = }')
+    print(f'{funcvars.__kwdefaults__ = }')
+  
+    pprint('vars()'.center(30, '-'))
     pprint(vars())
-    print('foo_vars.__dict__'.center(30, '-'))
-    pprint(foo_vars.__dict__)
-    print('locals()'.center(30, '-'))
-    pprint(locals())
-    print('vars(foo_vars)'.center(30, '-'))
-    pprint(vars(foo_vars))
+    print('vars(funcvars)'.center(30, '-'))
     print('add a variable:')
-    foo_vars.new_vari = 777
-    pprint(vars(foo_vars))
+    funcvars.new_vari = 777
+    pprint(vars(funcvars))
 
 def ret_self(b=10, add=20):
     '''返回函数自身
@@ -374,7 +383,7 @@ if __name__ == '__main__':
         # test_a_lambda()
         test_ret_func()
         # outer_foo()
-        foo_vars('test')
+        funcvars('test')
     print(__doc__)
     demo()
 
