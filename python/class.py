@@ -318,16 +318,7 @@ from share import prn_title
 from pprint import pprint
 
 class InstMethod:
-    def foo(self, s = ''):
-        print(s)
-        i = int()
-        l = list()
-    def prn(self):
-        print(f'{InstMethod.__name__}')
-
-
-def test_InstMethod():
-    '''实力方法：
+    '''实例方法：
     特殊只读属性：
         __self__ 为类实例对象本身
         __func__ 为函数对象
@@ -335,16 +326,30 @@ def test_InstMethod():
         __name__ 为方法名称 (与 __func__.__name__ 作用相同)；
         __module__ 为方法所属模块的名称，没有则为 None。
     '''
+    def foo(self, s = ''):
+        print(s)
+        i = int(777)
+        l = list(range(3))
+        print('foo()'.center(20, '-'))
+        pprint(vars())
+        pprint(dir(self))
+    def prn(self):
+        print(f'{InstMethod.__name__}')
+
+
+def test_InstMethod():
     prn_title('test_InstMethod()')
-    ci = InstMethod()
-    print(f'{ci.foo.__self__ = }')
-    print(f'{ci.foo.__name__ = }')
-    print(f'{ci.foo.__module__ = }')
-    # print(f'{ci.__self__ = }')    # __self__ 无定义
-    print('vars(ci)'.center(20, '-'))
-    pprint(vars(ci))
+    c = InstMethod()
+    c.prn()
+    print(f'{c.foo.__self__ = }')
+    print(f'{c.foo.__func__ = }')
+    print(f'{c.foo.__name__ = }')
+    print(f'{c.foo.__module__ = }')
+    print('vars(c)'.center(20, '-'))
+    print(f'{vars(c) = }')
+    print(f'{vars(c.foo) = }')
+    c.foo()
     print('-'*30)
-    ci.prn()
 
 class C1():
     ''' 再次实验一下类变量、实例变量
