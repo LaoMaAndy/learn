@@ -504,8 +504,23 @@ r'''
 ## 自定义属性访问
     可以定义下列方法来自定义对类实例属性访问（x.name 的使用、赋值或删除）的具体含义.
     object.__getattr__(self, name)
-        
-
+        当默认属性访问因引发 AttributeError 而失败时被调用 
+            (可能是调用 __getattribute__() 时由于 name 不是一个实例属性或 self 的类关系树中的属性而引发了 
+            AttributeError； 或者是对 name 特性属性调用 __get__() 时引发了 AttributeError)。
+            此方法应当返回（找到的）属性值或是引发一个 AttributeError 异常。
+        请注意如果属性是通过正常机制找到的，__getattr__() 就不会被调用。
+            （这是在 __getattr__() 和 __setattr__() 之间故意设置的不对称性。）
+            这既是出于效率理由也是因为不这样设置的话 __getattr__() 将无法访问实例的其他属性。
+            要注意至少对于实例变量来说，你不必在实例属性字典中插入任何值（而是通过插入到其他对象）就可以模拟对它的完全控制。
+            请参阅下面的 __getattribute__() 方法了解真正获取对属性访问的完全控制权的办法。    
+    object.__getattribute__(self, name)
+        此方法会无条件地被调用以实现对类实例属性的访问。
+            如果类还定义了 __getattr__()，则后者不会被调用，除非 
+            __getattribute__() 显式地调用它或是引发了 AttributeError。
+        此方法应当返回（找到的）属性值或是引发一个 AttributeError 异常。
+            为了避免此方法中的无限递归，其实现应该总是调用具有相同名称的基类方法来访问它所需要的任何属性，
+            例如 object.__getattribute__(self, name)。
+    
 ## 自定义模块属性访问
 ## 实现描述器
 ## 调用描述器
