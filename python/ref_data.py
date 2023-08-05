@@ -501,7 +501,7 @@ r'''
         当未定义此方法时，如果已定义，则调用 __len__() ，并且如果其结果非零，则该对象被视为 true。
         如果一个类既没有定义 __len__() 也没有定义 __bool__() ，则它的所有实例都被视为 true。
 
-## 自定义属性访问
+## 自定义属性访问 Customizing attribute access
     可以定义下列方法来自定义对类实例属性访问（x.name 的使用、赋值或删除）的具体含义.
     object.__getattr__(self, name)
         当默认属性访问因引发 AttributeError 而失败时被调用 
@@ -520,22 +520,125 @@ r'''
         此方法应当返回（找到的）属性值或是引发一个 AttributeError 异常。
             为了避免此方法中的无限递归，其实现应该总是调用具有相同名称的基类方法来访问它所需要的任何属性，
             例如 object.__getattribute__(self, name)。
-    
-## 自定义模块属性访问
-## 实现描述器
+    object.__setattr__(self, name, value)
+        此方法在一个属性被尝试赋值时被调用。
+        这个调用会取代正常机制（即将值保存到实例字典）。 name 为属性名称， value 为要赋给属性的值。  
+    object.__delattr__(self, name)
+        类似于 __setattr__() 但其作用为删除而非赋值。此方法应该仅在 del obj.name 对于该对象有意义时才被实现。
+    object.__dir__(self)
+        此方法会在对相应对象调用 dir() 时被调用。返回值必须为一个序列。 dir() 会把返回的序列转换为列表并对其排序。
+
+## 自定义模块属性访问 Customizing module attribute access
+    想要更细致地自定义模块的行为（设置属性和特性属性等待），可以将模块对象的 __class__ 属性设置为一个 types.ModuleType 的子类。例如:
+        import sys
+        from types import ModuleType
+
+        class VerboseModule(ModuleType):
+            def __repr__(self):
+                return f'Verbose {self.__name__}'
+
+            def __setattr__(self, attr, value):
+                print(f'Setting {attr}...')
+                super().__setattr__(attr, value)
+
+        sys.modules[__name__].__class__ = VerboseModule
+
+    __dir__ 函数应当不接受任何参数，并且返回一个表示模块中可访问名称的字符串序列。 
+        此函数如果存在，将会重载一个模块中的标准 dir() 查找。
+
+    特殊名称 __getattr__ 和 __dir__ 还可被用来自定义对模块属性的访问。
+    模块层级的 __getattr__ 函数应当接受一个参数，其名称为一个属性名，并返回计算结果值或引发一个 AttributeError。
+    如果通过正常查找即 object.__getattribute__() 未在模块对象中找到某个属性，
+    则 __getattr__ 会在模块的 __dict__ 中查找，未找到时会引发一个 AttributeError。
+    如果找到，它会以属性名被调用并返回结果值。
+
+## 实现描述器 Implementing Descriptors
+
 ## 调用描述器
 ## __slots__
 ### 使用 __slots__ 的注意事项
 ## 自定义类创建
-### 元类
-###  解析 MRO 条目
-### 确定适当的元类
-### 准备类命名空间
-### 执行类主体
-### 创建类对象
-### 元类的作用
-## 自定义实例及子类检查
-## 模拟泛型类型
+### 元类 Metaclasses
+    默认情况下，类是使用 type() 来构建的。
+    类体会在一个新的命名空间内执行，类名会被局部绑定到 type(name, bases, namespace) 的结果。
+    类创建过程可通过在定义行传入 metaclass 关键字参数，或是通过继承一个包含此参数的现有类来进行定制。
+    在以下示例中，MyClass 和 MySubclass 都是 Meta 的实例:
+        class Meta(type):
+            pass
+
+        class MyClass(metaclass=Meta):
+            pass
+
+        class MySubclass(MyClass):
+            pass
+    在类定义内指定的任何其他关键字参数都会在下面所描述的所有元类操作中进行传递。
+    当一个类定义被执行时，将发生以下步骤:
+        解析 MRO 条目； Method Resolution Order (MRO)
+        确定适当的元类；
+        准备类命名空间；
+        执行类主体；
+        创建类对象。
+
+###  解析 MRO 条目 Resolving MRO entries
+    object.__mro_entries__(self, bases)
+        如果类定义中出现的基类不是 type 的实例，则在该基类上搜索 __mro_entries__() 方法。
+        如果找到 __mro_entries__() 方法，则在创建类时将用 __mro_entries__() 调用的结果替换基类。
+        该方法是通过传递给 bases 参数的原始基元组来调用的，并且必须返回将使用的类的元组而不是基元组。
+        返回的元组可能为空：在这些情况下，原始基数将被忽略。
+
+### 确定适当的元类 Determining the appropriate metaclass
+    为一个类定义确定适当的元类是根据以下规则:
+        如果没有基类且没有显式指定元类，则使用 type()；
+        如果给出一个显式元类而且 不是 type() 的实例，则其会被直接用作元类；
+        如果给出一个 type() 的实例作为显式元类，或是定义了基类，则使用最近派生的元类。
+        最近派生的元类会从显式指定的元类（如果有）以及所有指定的基类的元类（即 type(cls)）中选取。
+            最近派生的元类应为 所有 这些候选元类的一个子类型。
+            如果没有一个候选元类符合该条件，则类定义将失败并抛出 TypeError。
+
+### 准备类命名空间 Preparing the class namespace
+    一旦确定了适当的元类，就将准备好类的命名空间。 如果元类具有 __prepare__ 属性，
+        它将以 namespace = metaclass.__prepare__(name, bases, **kwds) 的形式被调用
+        （其中如果存在任何额外关键字参数，则应来自类定义）。 __prepare__ 方法应当被实现为 类方法。 
+        __prepare__ 所返回的命名空间会被传入 __new__，但是当最终的类对象被创建时该命名空间会被拷贝到一个新的 dict 中。
+    如果元类没有 __prepare__ 属性，则类命名空间将初始化为一个空的有序映射。
+
+### 执行类主体 Executing the class body
+    类主体会以（类似于） exec(body, globals(), namespace) 的形式被执行。
+        普通调用与 exec() 的关键区别在于当类定义发生于函数内部时，
+        词法作用域允许类主体（包括任何方法）引用来自当前和外部作用域的名称。
+    但是，即使当类定义发生于函数内部时，在类内部定义的方法仍然无法看到在类作用域层次上定义的名称。
+        类变量必须通过实例的第一个形参或类方法来访问，或者是通过下一节中描述的隐式词法作用域的 __class__ 引用。
+
+### 创建类对象 Creating the class object
+    一旦执行类主体完成填充类命名空间，将通过调用 metaclass(name, bases, namespace, **kwds) 创建类对象
+        （此处的附加关键字参数与传入 __prepare__ 的相同）。
+    如果类主体中有任何方法引用了 __class__ 或 super，这个类对象会通过零参数形式的 super(). __class__ 所引用，
+        这是由编译器所创建的隐式闭包引用。这使用零参数形式的 super() 能够正确标识正在基于词法作用域来定义的类，
+        而被用于进行当前调用的类或实例则是基于传递给方法的第一个参数来标识的。
+    当使用默认的元类 type，或者任何最终会调用 type.__new__ 的元类时，以下额外的自定义步骤将在创建类对象之后被发起调用:
+        1、type.__new__ 方法会收集类命名空间中所有定义了 __set_name__() 方法的属性;
+        2、这些 __set_name__ 方法将附带所定义的类和指定的属性所赋的名称进行调用;
+        3、在新类基于方法解析顺序所确定的直接父类上调用 __init_subclass__() 钩子。
+    在类对象创建之后，它会被传给包含在类定义中的类装饰器（如果有的话），得到的对象将作为已定义的类绑定到局部命名空间。
+    当通过 type.__new__ 创建一个新类时，提供以作为命名空间形参的对象会被复制到一个新的有序映射并丢弃原对象。
+        这个新副本包装于一个只读代理中，后者则成为类对象的 __dict__ 属性。
+
+### 元类的作用 Uses for metaclasses
+    元类的潜在作用非常广泛。已经过尝试的设想包括枚举、日志、接口检查、自动委托、自动特征属性创建、代理、框架以及自动资源锁定/同步等等。
+
+## 自定义实例及子类检查 Customizing instance and subclass checks
+    以下方法被用来重载 isinstance() 和 issubclass() 内置函数的默认行为。
+    特别地，元类 abc.ABCMeta 实现了这些方法以便允许将抽象基类（ABC）作为“虚拟基类”添加到任何类或类型（包括内置类型），包括其他 ABC 之中。
+    class.__instancecheck__(self, instance)
+        如果 instance 应被视为 class 的一个（直接或间接）实例则返回真值。
+        如果定义了此方法，则会被调用以实现 isinstance(instance, class)。
+    class.__subclasscheck__(self, subclass)
+        Return true 如果 subclass 应被视为 class 的一个（直接或间接）子类则返回真值。
+        如果定义了此方法，则会被调用以实现 issubclass(subclass, class)。
+    请注意这些方法的查找是基于类的类型（元类）。它们不能作为类方法在实际的类中被定义。
+        这与基于实例被调用的特殊方法的查找是一致的，只有在此情况下实例本身被当作是类。
+
+## 模拟泛型类型  Emulating generic types
 ### __class_getitem__ 的目的
 ### __class_getitem__ 与 __getitem__
 ## 模拟可调用对象
