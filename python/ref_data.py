@@ -639,10 +639,104 @@ r'''
         这与基于实例被调用的特殊方法的查找是一致的，只有在此情况下实例本身被当作是类。
 
 ## 模拟泛型类型  Emulating generic types
-### __class_getitem__ 的目的
-### __class_getitem__ 与 __getitem__
+    当使用 类型标注 时，使用 Python 的方括号标记来 形参化 一个 generic type 往往会很有用处。 
+        例如，list[int] 这样的标注可以被用来表示一个 list 中的所有元素均为 int 类型。
+    一个类 通常 只有在定义了特殊的类方法 __class_getitem__() 时才能被形参化。
+        classmethod object.__class_getitem__(cls, key)
+        按照 key 参数指定的类型返回一个表示泛型类的专门化对象。
+    当在类上定义时，__class_getitem__() 会自动成为类方法。 因此，当它被定义时没有必要使用 @classmethod 来装饰。
+
+### __class_getitem__ 的目的  The purpose of __class_getitem__
+    __class_getitem__() 的目的是允许标准库泛型类的运行时形参化以更方便地对这些类应用 类型提示。
+    要实现可以在运行时被形参化并可被静态类型检查所理解的自定义泛型类，
+        用户应当从已经实现了 __class_getitem__() 的标准库类继承，或是从 typing.Generic 继承，
+        这个类拥有自己的 __class_getitem__() 实现。
+    标准库以外的类上的 __class_getitem__() 自定义实现可能无法被第三方类型检查器如 mypy 所理解。 
+        不建议在任何类上出于类型提示以外的目的使用 __class_getitem__()。
+
+### __class_getitem__ 对比（versus） __getitem__ 
+    通常，使用方括号语法 抽取 一个对象将会调用在该对象的类上定义的 __getitem__() 实例方法。 
+    不过，如果被拟抽取的对象本身是一个类，则可能会调用 __class_getitem__() 类方法。 
+        __class_getitem__() 如果被正确地定义，则应当返回一个 GenericAlias 对象。
+    使用 expression obj[x] 来呈现，Python 解释器会遵循下面这样的过程来确定应当调用
+         __getitem__() 还是 __class_getitem__():
+
+        from inspect import isclass
+
+        def subscribe(obj, x):
+            """Return the result of the expression 'obj[x]'"""
+            class_of_obj = type(obj)
+            # If the class of obj defines __getitem__,
+            # call class_of_obj.__getitem__(obj, x)
+            if hasattr(class_of_obj, '__getitem__'):
+                return class_of_obj.__getitem__(obj, x)
+            # Else, if obj is a class and defines __class_getitem__,
+            # call obj.__class_getitem__(x)
+            elif isclass(obj) and hasattr(obj, '__class_getitem__'):
+                return obj.__class_getitem__(x)
+            # Else, raise an exception
+            else:
+                raise TypeError(
+                    f"'{class_of_obj.__name__}' object is not subscriptable"
+                )
+    在 Python 中，所有的类自身也是其他类的实例。 一个类所属的类被称为该类的 metaclass，
+        并且大多数类都将 type 类作为它们的元类。 type 没有定义 __getitem__()，
+        这意味着 list[int], dict[str, float] 和 tuple[str, bytes] 这样的表达式都将
+            导致 __class_getitem__() 被调用:
+            # list has class "type" as its metaclass, like most classes:
+            type(list)
+            <class 'type'>
+            type(dict) == type(list) == type(tuple) == type(str) == type(bytes)
+            True
+            # "list[int]" calls "list.__class_getitem__(int)"
+            list[int]
+            list[int]
+            # list.__class_getitem__ returns a GenericAlias object:
+            type(list[int])
+            <class 'types.GenericAlias'>
+
 ## 模拟可调用对象
+    object.__call__(self[, args...])
+        此方法会在实例作为一个函数被“调用”时被调用；如果定义了此方法，则 x(arg1, arg2, ...) 
+        就大致可以被改写为 type(x).__call__(x, arg1, ...)。
+
 ## 模拟容器类型
+    可以定义下列方法来实现容器对象。 
+    容器通常属于 序列 (如 列表 或 元组) 或者 映射 (如 字典)，但也有表现为其他形式的容器。 
+    前几个方法被用来模拟序列或是模拟映射；
+    两者的不同之处在于序列允许的键应为整数 k 并且 0 <= k < N 其中 N 是序列或 slice 对象的长度，它们定义了条目的范围。 
+    此外还建议让映射提供 
+        keys(), values(), items(), get(), clear(), setdefault(), 
+        pop(), popitem(), copy() 以及 update() 等方法，
+    它们的行为应与 Python 的标准 字典 对象类似。 
+    此外 collections.abc 模块提供了一个 MutableMapping abstract base class 以便根据由 
+        __getitem__(), __setitem__(), __delitem__() 和 keys() 组成的基本集来创建所需的方法。 
+    可变序列还应提供 
+        append(), count(), index(), extend(), insert(), pop(), remove(), 
+        reverse() 和 sort() 等方法，就像 Python 的标准 list 对象那样。 
+    最后，序列类型还应通过定义下文描述的 
+        __add__(), __radd__(), __iadd__(), __mul__(), __rmul__() 和 __imul__() 
+        等方法来实现加法（指拼接）和乘法（指重复）；它们不应定义其他数值运算符。 
+    此外还建议映射和序列都实现 __contains__() 方法以允许高效地使用 in 运算符；
+        对于映射，in 应当搜索映射的键；对于序列，则应当搜索其中的值。 
+    另外还建议映射和序列都实现 __iter__() 方法以允许高效地迭代容器中的条目；
+        对于映射，__iter__() 应当迭代对象的键；对于序列，则应当迭代其中的值。
+    object.__len__(self)
+        调用以实现内置函数 len() 。应返回对象的长度，整数 >= 0。此外，
+        未定义 __bool__() 方法且其 __len__() 方法返回零的对象是在布尔上下文中被认为是 false。
+    object.__length_hint__(self)
+        调用此方法以实现 operator.length_hint()。 
+        应该返回对象长度的估计值（可能大于或小于实际长度）。 此长度应为一个 >= 0 的整数。 
+        返回值也可以为 NotImplemented，这会被视作与 __length_hint__ 方法完全不存在时一样处理。 
+        此方法纯粹是为了优化性能，并不要求正确无误。
+    
+
+
+
+
+
+
+
 ## 模拟数字类型
 ## with 语句上下文管理器
 ## 定制类模式匹配中的位置参数
