@@ -1,4 +1,8 @@
 Readline 快捷键
+https://tiswww.case.edu/php/chet/readline/rluserman.html
+https://github.com/chzyer/readline/blob/master/doc/shortcut.md
+http://www.gnu.org/software/readline/
+
 移动光标
     ctrl-b : 左移动一个字符
     ctrl-f : 右移动一个字符

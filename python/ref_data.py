@@ -729,17 +729,146 @@ r'''
         应该返回对象长度的估计值（可能大于或小于实际长度）。 此长度应为一个 >= 0 的整数。 
         返回值也可以为 NotImplemented，这会被视作与 __length_hint__ 方法完全不存在时一样处理。 
         此方法纯粹是为了优化性能，并不要求正确无误。
-    
+    object.__getitem__(self, key)
+        调用此方法以实现 self[key] 的求值。 对于 sequence 类型，接受的键应为整数和切片对象。 
+        请注意负数索引（如果类想要模拟 sequence 类型）的特殊解读是依赖于 __getitem__() 方法。 
+        如果 key 的类型不正确，则会引发 TypeError；
+        如果为序列索引集范围以外的值（在进行任何负数索引的特殊解读之后），则应当引发 IndexError。 
+        对于 mapping 类型，如果 key 找不到（不在容器中），则应当引发 KeyError。
+        备注 :
+            for 循环在有不合法索引时会期待捕获 IndexError 以便正确地检测到序列的结束。
+            当为类添加下标时，可能会调用特殊的类方法 __class_getitem__() 而不是 __getitem__() 。
+            有关更多详细信息，请参阅 __class_getitem__ 与 __getitem__ 。
+    object.__setitem__(self, key, value)
+        调用此方法以实现向 self[key] 赋值。注意事项与 __getitem__() 相同。
+        为对象实现此方法应该仅限于需要映射允许基于键修改值或添加键，或是序列允许元素被替换时。
+        不正确的 key 值所引发的异常应与 __getitem__() 方法的情况相同。
+    object.__delitem__(self, key)
+        调用以实现 self[key] 的删除。与 __getitem__() 的注释相同。
+        仅当对象支持删除键时才应为映射实现此功能，或者如果可以从序列中删除元素，则应为序列实现此功能。
+        对于不正确的键值，应该引发与 __getitem__() 方法相同的异常。
+    object.__missing__(self, key)
+        此方法由 dict.__getitem__() 在找不到字典中的键时调用以实现 dict 子类的 self[key]。
+    object.__iter__(self)
+        此方法会在需要为一个容器创建 iterator 时被调用。 
+        此方法应当返回一个新的迭代器对象，它可以对容器中的所有对象执行迭代。
+        对于映射，它应当对窗口中的键执行迭代。
+    object.__reversed__(self)
+        此方法（如果存在）会被 reversed() 内置函数调用以实现逆向迭代。
+            它应当返回一个新的以逆序逐个迭代容器内所有对象的迭代器对象。
+        如果未提供 __reversed__() 方法，则 reversed() 内置函数将回退到使用序列协议 (__len__() 和 __getitem__())。
+            支持序列协议的对象应当仅在能够提供比 reversed() 所提供的实现更高效的实现时才提供 __reversed__() 方法。
+    (in 和 not in) 成员检测运算符 
+        通常以对容器进行逐个迭代的方式来实现。 
+        不过，容器对象可以提供以下特殊方法并采用更有效率的实现，这样也不要求对象必须为可迭代对象。
+    object.__contains__(self, item)
+        调用此方法以实现成员检测运算符。如果 item 是 self 的成员则应返回真，否则返回假。
+        对于映射类型，此检测应基于映射的键而不是值或者键值对。        
 
+## 模拟数字类型 Emulating numeric types
+    定义以下方法即可模拟数字类型。特定种类的数字不支持的运算（例如非整数不能进行位运算）所对应的方法应当保持未定义状态。
+    object.__add__(self, other)
+    object.__sub__(self, other)
+    object.__mul__(self, other)
+    object.__matmul__(self, other)
+    object.__truediv__(self, other)
+    object.__floordiv__(self, other)
+    object.__mod__(self, other)
+    object.__divmod__(self, other)
+    object.__pow__(self, other[, modulo])
+    object.__lshift__(self, other)
+    object.__rshift__(self, other)
+    object.__and__(self, other)
+    object.__xor__(self, other)
+    object.__or__(self, other)
+    调用这些方法来实现二进制算术运算（ + 、 - 、 * 、 @ 、 / 、 // 、 % 、 
+        divmod() 、 pow() 、 ** 、 << 、< b11>、 & 、 ^ 、 | ）。
+    例如，要计算表达式 x + y ，其中 x 是具有 __add__() 方法的类的实例，将调用 type(x).__add__(x, y) 。 
+        __divmod__() 方法应该等同于使用 __floordiv__() 和 __mod__() ；
+        它不应该与 __truediv__() 相关。
+    请注意，如果要支持内置 pow() 函数的三元版本，则应将 __pow__() 定义为接受可选的第三个参数。
+        如果这些方法之一不支持使用提供的参数进行操作，则它应该返回 NotImplemented 。
+    如果这些方法中的某一个不支持与所提供参数进行运算，它应该返回 NotImplemented
+    object.__radd__(self, other)
+    object.__rsub__(self, other)
+    object.__rmul__(self, other)
+    object.__rmatmul__(self, other)
+    object.__rtruediv__(self, other)
+    object.__rfloordiv__(self, other)
+    object.__rmod__(self, other)
+    object.__rdivmod__(self, other)
+    object.__rpow__(self, other[, modulo])
+    object.__rlshift__(self, other)
+    object.__rrshift__(self, other)
+    object.__rand__(self, other)
+    object.__rxor__(self, other)
+    object.__ror__(self, other)
+    调用这些方法来实现二进制算术运算（ + 、 - 、 * 、 @ 、 / 、 // 、 % 、 
+        divmod() 、 pow() 、 ** 、 << 、< b11> 、 & 、 ^ 、 | ）以及反射（交换）操作数。
+    仅当左操作数不支持相应的操作 3 并且操作数类型不同时，才会调用这些函数。 
+    4 例如，要计算表达式 x - y ，其中 y 是具有 __rsub__() 方法的类的实例，
+        如果 type(x).__sub__(x, y) /b18> 返回未实现。
+        请注意，三元 pow() 不会尝试调用 __rpow__() （强制规则会变得太复杂）。
+    备注 如果右操作数类型为左操作数类型的一个子类，且该子类提供了指定运算的反射方法，
+        则此方法将先于左操作数的非反射方法被调用。 此行为可允许子类重载其祖先类的运算符。
+    object.__iadd__(self, other)
+    object.__isub__(self, other)
+    object.__imul__(self, other)
+    object.__imatmul__(self, other)
+    object.__itruediv__(self, other)
+    object.__ifloordiv__(self, other)
+    object.__imod__(self, other)
+    object.__ipow__(self, other[, modulo])
+    object.__ilshift__(self, other)
+    object.__irshift__(self, other)
+    object.__iand__(self, other)
+    object.__ixor__(self, other)
+    object.__ior__(self, other)¶
+    调用这些方法来实现扩展算术赋值 (+=, -=, *=, @=, /=, //=, %=, **=, <<=, >>=, &=, ^=, |=)。
+        这些方法应该尝试进行自身操作 (修改 self) 并返回结果 (结果应该但并非必须为 self)。
+    如果某个方法未被定义，相应的扩展算术赋值将回退到普通方法。
+        例如，如果 x 是具有 __iadd__() 方法的类的一个实例，则 x += y 就等价于 x = x.__iadd__(y)。
+        否则就如 x + y 的求值一样选择 x.__add__(y) 和 y.__radd__(x)。
+        在某些情况下，扩展赋值可导致未预期的错误 (参见 为什么 a_tuple[i] += ['item'] 会引发异常？)，
+        但此行为实际上是数据模型的一个组成部分。
+    object.__neg__(self)
+    object.__pos__(self)
+    object.__abs__(self)
+    object.__invert__(self)
+        调用此方法以实现一元算术运算 (-, +, abs() 和 ~)。
+    object.__complex__(self)
+    object.__int__(self)
+    object.__float__(self)
+    调用这些方法以实现内置函数 complex(), int() 和 float()。应当返回一个相应类型的值。
+    object.__index__(self)
+    调用此方法以实现 operator.index() 以及 Python 需要无损地将数字对象转换为整数对象的场合（
+        例如切片或是内置的 bin(), hex() 和 oct() 函数)。 存在此方法表明数字对象属于整数类型。 必须返回一个整数。
+    如果未定义 __int__(), __float__() 和 __complex__() 
+        则相应的内置函数 int(), float() 和 complex() 将回退为 __index__()。
+    object.__round__(self[, ndigits])
+    object.__trunc__(self)
+    object.__floor__(self)
+    object.__ceil__(self)
+    调用这些方法以实现内置函数 round() 以及 math 函数 trunc(), floor() 和 ceil()。 
+        除了将 ndigits 传给 __round__() 的情况之外这些方法的返回值都应当是原对象截断为 Integral (通常为 int)。
+    如果 __int__() 或 __index__() 均未被定义则内置函数 int() 会回退至 __trunc__()。
+        在 3.11 版更改: The delegation of int() to __trunc__() is deprecated.
 
+## with 语句上下文管理器 With Statement Context Managers
+    上下文管理器是一个对象，它定义执行 with 语句时要建立的运行时上下文。
+        上下文管理器处理执行代码块所需的运行时上下文的进入和退出。
+        上下文管理器通常使用 with 语句（在 with 语句部分中描述）调用，但也可以通过直接调用其方法来使用。
+    object.__enter__(self)
+        进入与此对象相关的运行时上下文。 with 语句将会绑定这个方法的返回值到 as 子句中指定的目标，如果有的话。
+    object.__exit__(self, exc_type, exc_value, traceback)
+        退出关联到此对象的运行时上下文。 各个参数描述了导致上下文退出的异常。 
+            如果上下文是无异常地退出的，三个参数都将为 None。
+        如果提供了异常，并且希望方法屏蔽此异常（即避免其被传播），则应当返回真值。 
+            否则的话，异常将在退出此方法时按正常流程处理。
+        请注意 __exit__() 方法不应该重新引发被传入的异常，这是调用者的责任。
 
-
-
-
-
-## 模拟数字类型
-## with 语句上下文管理器
 ## 定制类模式匹配中的位置参数
+
 ## 特殊方法查找
 # 协程
 ## 可等待对象
