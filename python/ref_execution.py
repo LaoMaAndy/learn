@@ -15,6 +15,15 @@ r'''
 
 
 '''
+class MyClass:
+    j = 10
+    def foo(self):
+        print(f'{self.j =}')
+
+def test_scope():
+    m = MyClass()
+    m.foo()
+
 def test_nonlocal():
     j = 10
     def inner_func():
@@ -30,4 +39,5 @@ if __name__ == '__main__':
     def test():
         print('ref_data.py')
         test_nonlocal()
+        test_scope()
     test()
