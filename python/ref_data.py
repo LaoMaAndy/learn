@@ -782,7 +782,7 @@ r'''
     object.__xor__(self, other)
     object.__or__(self, other)
     调用这些方法来实现二进制算术运算（ + 、 - 、 * 、 @ 、 / 、 // 、 % 、 
-        divmod() 、 pow() 、 ** 、 << 、< b11>、 & 、 ^ 、 | ）。
+        divmod() 、 pow() 、 ** 、 << 、>>、 & 、 ^ 、 | ）。
     例如，要计算表达式 x + y ，其中 x 是具有 __add__() 方法的类的实例，将调用 type(x).__add__(x, y) 。 
         __divmod__() 方法应该等同于使用 __floordiv__() 和 __mod__() ；
         它不应该与 __truediv__() 相关。
@@ -867,15 +867,106 @@ r'''
             否则的话，异常将在退出此方法时按正常流程处理。
         请注意 __exit__() 方法不应该重新引发被传入的异常，这是调用者的责任。
 
-## 定制类模式匹配中的位置参数
+## 定制类模式匹配中的位置参数  Customizing positional arguments in class pattern matching
+    在 match 中使用 类名。
+    当在模式中使用类名时，默认情况下不允许模式中的位置参数，即，如果没有 MyClass 的特殊支持， case MyClass(x, y) 通常是无效的。
+        为了能够使用这种模式，类需要定义一个 __match_args__ 属性。
+    object.__match_args__
+        该类变量可以被赋值为一个字符串元组。 当该类被用于带位置参数的类模式时，每个位置参数都将被转换为关键字参数，
+        并使用 __match_args__ 中的对应值作为关键字。 缺失此属性就等价于将其设为 ()。
+    参见：Structural Pattern Matching
+        Python match 语句的规范。
+        https://peps.python.org/pep-0634/
+## 特殊方法查找 Special method lookup
+    对于自定义类来说，特殊方法的隐式发起调用仅保证在其定义于对象类型中时能正确地发挥作用，
+    而不能定义在对象实例字典中。 该行为就是以下代码会引发异常的原因。:
+        class C:
+            pass
 
-## 特殊方法查找
-# 协程
-## 可等待对象
-## 协程对象
+        c = C()
+        c.__len__ = lambda: 5
+        len(c)   <-- 出错
+
+    注意：数字1后面加一个空格，然后是 点号
+        1 .__hash__() == hash(1)
+        True
+        int.__hash__() == hash(int)
+        Traceback (most recent call last):
+          File "<stdin>", line 1, in <module>
+        TypeError: descriptor '__hash__' of 'int' object needs an argument
+
+    以这种方式错误地尝试调用类的未绑定方法有时被称为“元类混淆”，并且可以通过在查找特殊方法时绕过实例来避免：
+        type(1).__hash__(1) == hash(1)
+        True
+        type(int).__hash__(int) == hash(int)
+        True
+
+    除了为了正确性而绕过任何实例属性之外，隐式特殊方法查找通常还会绕过对象元类的 __getattribute__() 方法：
+        class Meta(type):
+            def __getattribute__(*args):
+                print("Metaclass getattribute invoked")
+                return type.__getattribute__(*args)
+
+        class C(object, metaclass=Meta):
+            def __len__(self):
+                return 10
+            def __getattribute__(*args):
+                print("Class getattribute invoked")
+                return object.__getattribute__(*args)
+
+        c = C()
+        c.__len__()                 # Explicit lookup via instance
+        Class getattribute invoked
+        10
+        type(c).__len__(c)          # Explicit lookup via type
+        Metaclass getattribute invoked
+        10
+        len(c)                      # Implicit lookup
+        10
+
+# 协程 Coroutines
+## 可等待对象 Awaitable Objects
+    awaitable 对象主要实现了 __await__() 方法。 从 async def 函数返回的 协程对象 即为可等待对象。
+    备注 
+        从带有 types.coroutine() 装饰器的生成器返回的 generator iterator 对象
+        也属于可等待对象，但它们并未实现 __await__()。
+    object.__await__(self)
+        必须返回一个 iterator。 应当被用来实现 awaitable 对象。 例如，asyncio.Future 实现了此方法以与 await 表达式相兼容。
+## 协程对象 Coroutine Objects
+    协程对象 属于 awaitable 对象。 协程的执行可以通过调用 __await__() 并迭代其结果来控制。 
+        当协程结束执行并返回时，迭代器会引发 StopIteration，而该异常的 value 属性将存放返回值。 
+        如果协程引发了异常，它会被迭代器传播出去。 协程不应当直接引发未被处理的 StopIteration 异常。
+    协程也具有下面列出的方法，它们类似于生成器的对应方法 (参见 生成器-迭代器的方法)。 
+        但是，与生成器不同，协程并不直接支持迭代。
+    coroutine.send(value)
+        开始或恢复协程的执行。 如果 value 为 None，那么这就相当于前往 __await__() 所返回迭代器的下一项。 
+        如果 value 不为 None，此方法将委托给导致协程挂起的迭代器的 send() 方法。
+        其结果（返回值，StopIteration 或是其他异常）将与上述对 __await__() 返回值进行迭代的结果相同。
+    coroutine.throw(value)
+    coroutine.throw(type[, value[, traceback]])
+        在协程内引发指定的异常。 此方法将委托给导致该协程挂起的迭代器的 throw() 方法，如果存在此方法的话。 
+        否则，该异常将在挂起点被引发。 其结果（返回值，StopIteration 或是其他异常）将与上述对 __await__() 返回值进行迭代的结果相同。 
+        如果该异常未在协程内被捕获，则将回传给调用方。
+    coroutine.close()
+        此方法会使得协程清理自身并退出。 如果协程被挂起，此方法会先委托给导致协程挂起的迭代器的 close() 方法，如果存在该方法。 
+        然后它会在挂起点引发 GeneratorExit，使得协程立即清理自身。 最后，协程会被标记为已结束执行，即使它根本未被启动。
+        当协程对象将要被销毁时，会使用以上处理过程来自动关闭。      
+
 ## 异步迭代器
-## 异步上下文管理器
+    异步迭代器 可以在其 __anext__ 方法中调用异步代码。
+    异步迭代器可在 async for 语句中使用。
+    object.__aiter__(self)
+        必须返回一个 异步迭代器 对象。
+    object.__anext__(self)
+        必须返回一个 可迭代对象 输出迭代器的下一结果值。 当迭代结束时应该引发 StopAsyncIteration 错误。
 
+## 异步上下文管理器
+    异步上下文管理器 是 上下文管理器 的一种，它能够在其 __aenter__ 和 __aexit__ 方法中暂停执行。
+    异步上下文管理器可在 async with 语句中使用。
+    object.__aenter__(self)
+        在语义上类似于 __enter__()，仅有的区别是它必须返回一个 可等待对象。
+    object.__aexit__(self, exc_type, exc_value, traceback)
+        在语义上类似于 __exit__()，仅有的区别是它必须返回一个 可等待对象。
 
 '''
 
