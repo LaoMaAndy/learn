@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 r'''
-# 内置函数 Built-in Functions 
+# 内置函数 Built-in Functions 72
 abs()
 aiter()
 all()
