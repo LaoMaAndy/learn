@@ -24,7 +24,7 @@ r'''
 ### 集合显示 Set displays
     set_display ::=  "{" (starred_list | comprehension) "}"
 
-###  字典显示 Dictionary displays
+### 字典显示 Dictionary displays
     dict_display       ::=  "{" [dict_item_list | dict_comprehension] "}"
     dict_item_list     ::=  dict_item ("," dict_item)* [","]
     dict_item          ::=  expression ":" expression | "**" or_expr
@@ -149,10 +149,27 @@ r'''
 
 ## 幂运算符 The power operator
     幂运算符的绑定比在其左侧的一元运算符更紧密；但绑定紧密程度不及在其右侧的一元运算符。
-    此运算符可使用特殊的 __pow__() 方法来自定义。    
+    此运算符可使用特殊的 __pow__() 方法来自定义。
 
+## 一元算术和位运算 Unary arithmetic and bitwise operations
+    一元的 - (负值) 运算符会产生其数字参数的负值；该运算可通过 __neg__() 特殊方法来重载。
+    一元的 + (正值) 运算符会原样输出其数字参数；该运算可通过 __pos__() 特殊方法来重载。
+    一元的 ~ (取反) 运算符会对其整数参数按位取反。 x 的按位取反被定义为 -(x+1)。 
+        它只作用于整数或是重载了 __invert__() 特殊方法的自定义对象。    
 
-
+##  二元算术运算符 Binary arithmetic operations
+    m_expr ::=  u_expr | m_expr "*" u_expr | m_expr "@" m_expr |
+                m_expr "//" u_expr | m_expr "/" u_expr |
+                m_expr "%" u_expr
+    a_expr ::=  m_expr | a_expr "+" m_expr | a_expr "-" m_expr
+    
+    运算符 * (乘) 将输出其参数的乘积。 
+        两个参数或者必须都为数字，或者一个参数必须为整数而另一个参数必须为序列。 
+        在前一种情况下，两个数字将被转换为相同类型然后相乘。 
+        在后一种情况下，将执行序列的重复；重复因子为负数将输出空序列。
+        此运算可使用特殊的 __mul__() 和 __rmul__() 方法来自定义。
+    运算符 @ (at) 的目标是用于矩阵乘法。 没有内置 Python 类型实现此运算符。
+    
 
 
 '''
