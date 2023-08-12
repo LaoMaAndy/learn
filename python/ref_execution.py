@@ -13,12 +13,13 @@ r'''
     
 # 名称的绑定  Naming and binding
 
-
 '''
+
 class MyClass:
     j = 10
     def foo(self):
         print(f'{self.j =}')
+        #print(f'{j =}')  # NameError: name 'j' is not defined
 
 def test_scope():
     m = MyClass()
