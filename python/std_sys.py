@@ -19,7 +19,7 @@ def test_sys_flags():
              ,'sys.flags'
              ,'sys.float_info'
              ,'sys.platform'
-             ,''
+             ,'sys.int_info'
             ]
     for s in flags:
         if s:
