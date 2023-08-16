@@ -32,7 +32,7 @@ r'''
         FLOAT
         REAL
         DOUBLE
-        PRECISION
+        PRECISION ）。
     关键字 INT 是 INTEGER 的同义词，
     关键字 DEC 和 FIXED 是 DECIMAL 的同义词。 
 
