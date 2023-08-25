@@ -1,5 +1,28 @@
 #!/usr/bin/env python3
 r'''
+# SQL 语言规范
+# 常量
+    null(is null, is not null)
+# 操作符 operator
+    sqlite3 不支持：
+    创建 create database,  use,  
+
+    sqlite3 支持
+    创建 create,  
+    
+    插入
+        insert into...value/values...
+
+    选择
+        select,  from,  
+    条件
+        where,  where not
+    比较：=  <>  >  <  >=  <=  is  is not
+        between...and... (相当于a<=x<=b) 
+        in (... , ...)  not in 
+        like 通配符（% 任意内容  _ 一个字符）
+    逻辑：and,  or,  not 
+
 
 # 创建数据库
     CREATE DATABASE data_base_name
@@ -70,27 +93,8 @@ r'''
     SELECT data_fields FROM table_name WHERE express 
     SELECT drink_name FROM easy_drinks WHERE main = 'soda' AND amount1 > 1;
 
-# 常量
-    null(is null, is not null)
-# 操作符 operator
-    sqlite3 不支持：
-    创建 create database,  use,  
+# 删除记录
 
-    sqlite3 支持
-    创建 create,  
-    
-    插入
-        insert into...value/values...
-
-    选择
-        select,  from,  
-    条件
-        where,  where not
-    比较：=  <>  >  <  >=  <=  is  is not
-        between...and... (相当于a<=x<=b) 
-        in (... , ...)  not in 
-        like 通配符（% 任意内容  _ 一个字符）
-    逻辑：and,  or,  not 
 
 '''
 
