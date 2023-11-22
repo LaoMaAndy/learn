@@ -1,7 +1,0 @@
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\bin\Debug\Ch07Ex01.exe.config
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\bin\Debug\Ch07Ex01.exe
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\bin\Debug\Ch07Ex01.pdb
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\obj\Debug\Ch07Ex01.csprojAssemblyReference.cache
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\obj\Debug\Ch07Ex01.csproj.CoreCompileInputs.cache
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\obj\Debug\Ch07Ex01.exe
-\\vmware-host\Shared Folders\cs7\Chapter07\Ch07Ex01\obj\Debug\Ch07Ex01.pdb
