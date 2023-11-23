@@ -1,3 +1,0 @@
-#!/bin/bash
-#compile string
-gcc $1 ../../00template/test_string.c ../../00template/type.c

@@ -1,1 +1,0 @@
-gcc template/type.c template/string.c template/test_kmp.c $1

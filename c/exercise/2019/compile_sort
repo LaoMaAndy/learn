@@ -1,3 +1,0 @@
-#!/bin/bash
-#compile sort.c
-gcc $1 ../../00template/test_sort.c

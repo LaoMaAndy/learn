@@ -1,1 +1,0 @@
-gcc test_sort.c bbsort.c qksort.c rdsort.c shsort.c insort.c hpsort.c
