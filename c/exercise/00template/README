@@ -1,0 +1,23 @@
+/*
+bintree.c : 二叉树函数
+sort.c ： 排序算法
+    快速排序法， 希尔排序，插入排序， 冒泡排序，基数排序
+    堆排序，归并排序
+    kmp 查找算法
+string.c: 字符串
+    Strlen(), Strcpy(), Strncpy(), Strcat(), Strncat()
+    Strcmp(), Strncmp(), Strstr(), Strindex()
+    Strchr(), Strrchr(), Strspn(), Strcspn()
+    Strpbrk(), Strrev(), Strdup(), Strsqz()
+    Strsqzs(), Strtoup(), Strtolow(), Strlead()
+    Strtail(), Strtrim()
+bit.c: 比特函数
+    bit_set(), bit_clr(), bit_chk(), 
+    bit_get(), bit_prn()
+/exp/exp.c: 堆栈，
+/exp/exp_toker.c: 解析toker
+type.c: 字符判断函数
+word.c: 统计文件的单词出现次数
+tree.c: 使用二叉树
+
+*/
