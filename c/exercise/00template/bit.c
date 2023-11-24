@@ -1,6 +1,16 @@
 /*
 function: bit operate
+位操作函数：
+	bit_set() 设置: 设置第p位 至 p - n + 1位
+	bit_clr() 清除
+	bit_chk() 检测
+	bit_get() 返回状态
+	bit_prn() 打印
+
+以下函数若修改为 模版函数(C++)，则有一定实用性
+可存储，在需要时查阅
 */
+
 #include <stdio.h>
 
 unsigned bit_set(unsigned v, int p, int n)

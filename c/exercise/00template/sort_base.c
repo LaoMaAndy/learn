@@ -1,6 +1,9 @@
 /* base_sort.c */
 #include "template/head.h"
 
+/* 基数排序法 */
+// 需备注
+
 int Base(int val, int base, int n)
 {
 	int i;
@@ -9,6 +12,7 @@ int Base(int val, int base, int n)
 		val /= base;
 	return val % base;
 }
+
 void bsort(int v[], int n, int base, int time)
 {
 	int *bt;

@@ -1,6 +1,15 @@
 /* convert.c */
 #include "head.h"
 
+/* 
+几个类型转换的算法：
+	Atoi() 字符串转换为整数
+	Atof() 字符串转换为浮点数
+	Itoa() 整数转换为字符串
+	fact() 求阶乘的递归算法
+	prnstr() 打印字符串的递归算法
+	prnint() 打印整数的递归算法
+*/
 int Atoi(const char *s)
 {
 	int sign, val;

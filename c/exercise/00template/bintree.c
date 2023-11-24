@@ -1,6 +1,15 @@
 /* bintree.c */
 #include "bintree.h"
 
+/*
+二叉树算法的实现
+二叉排序树
+需要配合头文件
+
+注：链表结构的二叉排序树，对比：连续存储的二叉堆
+*/
+
+// 插入一个结点，参数为根节点，插入值
 tree *tree_ins(tree *root, int val)
 {
 	int r;
@@ -27,6 +36,8 @@ tree *tree_ins(tree *root, int val)
 	}
 	return root;
 }
+
+// 二叉排序树，查找
 tree *tree_find(tree *root, int val)
 {
 	int r;
@@ -40,6 +51,8 @@ tree *tree_find(tree *root, int val)
 		root = tree_find(root->right, val);
 	return root;
 }
+
+// 删除某个节点，根据给定值
 tree *tree_del(tree *root, int val)
 {
 	tree *temp;
@@ -72,6 +85,8 @@ tree *tree_del(tree *root, int val)
 	}
 	return root;
 }
+
+// 释放整个树的内存，递归
 tree *tree_free(tree *root)
 {
 	if (root != NULL)
@@ -82,6 +97,8 @@ tree *tree_free(tree *root)
 	}
 	return NULL;
 }
+
+// 查找最小值，最左侧的节点
 tree *tree_find_min(tree *root)
 {
 	if (root != NULL)
@@ -89,6 +106,8 @@ tree *tree_find_min(tree *root)
 			root = root->left;
 	return root;
 }
+
+// 查找最大值，最右侧的节点
 tree *tree_find_max(tree *root)
 {
 	if (root != NULL)
@@ -96,6 +115,8 @@ tree *tree_find_max(tree *root)
 			root = root->right;
 	return root;
 }
+
+// 计数
 int tree_count(tree *root)
 {
 	int left, right;
@@ -106,6 +127,9 @@ int tree_count(tree *root)
 	right = tree_count(root->right);
 	return (left + right + 1);
 }
+
+// 二叉树遍历，中序，递归
+// 执行给定的函数 foo()
 void tree_inorder(tree *root)
 {
 	if (root != NULL)
@@ -115,6 +139,8 @@ void tree_inorder(tree *root)
 		tree_inorder(root->right);
 	}
 }
+
+// 二叉树遍历，使用 堆栈/循环方式
 void tree_inorder_nr(tree *root)
 {
 	while (root != NULL || !isempty())
@@ -132,6 +158,8 @@ void tree_inorder_nr(tree *root)
 		}
 	}
 }
+
+// 二叉树遍历，前序，递归
 void tree_pre(tree *root)
 {
 	if (root != NULL)
@@ -141,6 +169,8 @@ void tree_pre(tree *root)
 		tree_pre(root->right);
 	}
 }
+
+// 二叉树遍历，前序，循环/堆栈
 void tree_pre_nr(tree *root)
 {
 	while (root != NULL || !isempty())
@@ -158,6 +188,8 @@ void tree_pre_nr(tree *root)
 		}
 	}
 }
+
+// 二叉树遍历，后序，递归
 void tree_post(tree *root)
 {
 	if (root != NULL)
@@ -167,6 +199,8 @@ void tree_post(tree *root)
 		foo(root);
 	}
 }
+
+// 二叉树遍历，后序，循环 / 堆栈
 void tree_post_nr(tree *root)
 {
 	while (root != NULL || !isempty())
@@ -186,6 +220,8 @@ void tree_post_nr(tree *root)
 	while (!isempty2())
 		foo((tree *) pop2());
 }
+
+// 二叉树层序遍历， 循环 / 队列
 void tree_level(tree *root)
 {
 	if (root == NULL)
@@ -202,6 +238,8 @@ void tree_level(tree *root)
 		}
 	}
 }
+
+// 求二叉树的高
 int tree_height(tree *root)
 {
 	int left, right, h;
@@ -216,6 +254,8 @@ int tree_height(tree *root)
 	}
 	return -1;
 }
+
+// 求二叉树某层的深度
 void tree_depth_n(tree *root, int n)
 {
 	if (root != NULL)
@@ -225,6 +265,8 @@ void tree_depth_n(tree *root, int n)
 		tree_depth_n(root->right, n + 1);
 	}
 }
+
+// 二叉树的深度
 void tree_depth(tree *root)
 {
 	tree_depth_n(root, 0);

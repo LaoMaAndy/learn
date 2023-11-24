@@ -1,6 +1,15 @@
 /* file.c */
 #include "head.h"
 
+/*
+实用底层函数read()实现类似库函数getchar()等的功能
+	Getchar() 缓冲区读取字符
+	Getchar2() 无缓冲区读取字符
+	Fgets() 读取字符串
+	Fgets2() 输出文件中的字符串
+	Filecopy() 拷贝文件
+	Printf() 类似于printf()处理不定数量参数
+*/
 int Getchar(void)
 {
 	static char buf[4096];
