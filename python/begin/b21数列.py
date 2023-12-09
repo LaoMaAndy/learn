@@ -10,7 +10,7 @@ def fibo(n):
         print(b, end = ' ')
         count += 1
     return a
-    
+# 将语句放入函数中是一个好方法
 def main():
     for i in range(10):
         fibo(i)
@@ -23,6 +23,7 @@ main()
 print("==== format string ====")
 import math
 i = 1
+# 字符串的格式化
 for i in range(20):
     print("{:<+10.2f}".format(12.34567890), end ='')
     print("{:#<+10.2f}".format(12.34567890), end ='')
