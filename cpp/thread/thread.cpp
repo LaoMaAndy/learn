@@ -22,25 +22,25 @@
 using namespace std;
 
 /* 测试函数 */
-void hello()
+void hello(int n=10)
 {
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < n; ++i)
         cout << i << " :hello, world" << endl;
 }
-void prn_chr()
+void prn_chr(int n=10)
 {
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < n; ++i)
         cout << i << " :abcdefghijklmnopq" << endl;
 }
-void prn_num()
+void prn_num(int n=10)
 {
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < n; ++i)
         cout << i << " :12345678901234567890" << endl;
 }
 /* 建立3个线程，合并运行 */
 void test_1()
 {
-    thread a{hello}, b{prn_chr}, c{prn_num};
+    thread a(hello, 10), b{prn_chr, 10}, c{prn_num, 10};
     a.join();
     b.join();
     c.join();
