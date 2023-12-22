@@ -7,9 +7,9 @@ https://docs.python.org/zh-cn/3/library/functions.html
 https://docs.python.org/zh-cn/3/library/stdtypes.html#text-sequence-type-str
 '''
 # 数学函数
-abs()
-round()
-pow()
+abs()		- 求绝对值
+round() - 四舍五入
+pow()	 	- 求指数
 divmod()
 hash()
 
