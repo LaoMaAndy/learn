@@ -22,28 +22,28 @@ import time
 import threading
 
 class APrint():
-    #_print = print  # other way override print() of builtins
+    _print = print  # other way override print() of builtins
     _act = False
     def __init__(self):
         self.t = threading.Thread(target=self._rotate)
 
     def __del__(self):
-        __builtins__.print('\b', end = '', flush = True)
+        self._print('\b', end = '', flush = True)
         self._act = False
 
     def __enter__(self):
-        self._act = True
+        self._taact = True
         self.t.start()
         
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        __builtins__.print('\b', end = '', flush = True)
+        self._print('\b', end = '', flush = True)
         self._act = False
 
     def prn(self, s):
-        __builtins__.print('\b', str(s), sep='', flush = True)
+        self._print('\b', str(s), sep='', flush = True)
 
     def print(self, s):
-        __builtins__.print('\b', str(s), sep='', flush = True)
+        self._print('\b', str(s), sep='', flush = True)
         if self._act == False:
             self.t1 = threading.Thread(target=self._rotate)
             self._act = True
